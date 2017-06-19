@@ -30,23 +30,27 @@ input  [8:0]  in_data;
 output [8:0]  out_data;
 
 //==== reg/wire ==========================
-reg                out_valid;
-reg                out_valid_w;
-reg         [11:0] addr_map_r;
-reg         [11:0] addr_map_w;
+reg         out_valid;
+reg         out_valid_w;
+reg  [6:0]  addr_map_r;
+reg  [6:0]  addr_map_w;
 
-reg         [7:0]  row_cntr_r;
-reg         [7:0]  row_cntr_w;
-reg         [7:0]  colume_cntr_r;
-reg         [7:0]  colume_cntr_w;
-reg         [7:0]  pixel_cntr_r;
-reg         [7:0]  pixel_cntr_w;
+reg  [3:0]  state_r;
+reg  [3:0]  state_w;
+reg  [7:0]  row_cntr_r;
+reg  [7:0]  row_cntr_w;
+reg  [7:0]  col_cntr_r;
+reg  [7:0]  col_cntr_w;
+reg  [7:0]  px_row_cntr_r;
+reg  [7:0]  px_row_cntr_w;
+reg  [7:0]  px_col_cntr_r;
+reg  [7:0]  px_col_cntr_w;
 
 
-reg signed  [8:0]  in_buffer_r;
-reg signed  [8:0]  in_buffer_w;
-reg signed  [14:0] map_r[0:2815]
-reg signed  [14:0] map_w[0:2815]
+// reg  [7:0]  in_buffer_r;
+// reg  [7:0]  in_buffer_w;
+reg  [13:0] map_r[0:120]
+reg  [13:0] map_w[0:120]
 
 integer i;
 parameter START  =0;
@@ -55,51 +59,62 @@ parameter MID    =2;
 parameter RIGHT  =3;
 parameter ENDING =4;
 
+assign in_addr  = {row_cntr_r,col_cntr_r};
+assign out_addr = {px_row_cntr_r,px_col_cntr_r};
+
 always@(*) begin
     state_w = state_r;
-    in_buffer_w         = in_buffer_r;
-    addr_map_w          = addr_map_r;
-    colume_cntr_w       = colume_cntr_r;
-    row_cntr_w          = row_cntr_r;
-    pixel_cntr_w        = pixel_cntr_w;
-    
+    // in_buffer_w         = in_buffer_r;
+    addr_map_w      = addr_map_r;
+    col_cntr_w      = col_cntr_r;
+    row_cntr_w      = row_cntr_r;
+    px_row_cntr_w   = px_row_cntr_w;
+    px_col_cntr_w   = px_col_cntr_w;
+    out_valid_w     = out_valid;
     
     
     case(state_r):
-    HEADER: begin
-        if(row_cntr_r==10 && colume_cntr_r==10) begin
-            state_w = MID;
-        end
-        
+    START: begin
+        state_w = LEFT;
+        col_cntr_w = 0;
+        row_cntr_w = 0;
+        px_row_cntr_w = 5;
+        px_col_cntr_w = 5;
+        addr_map_w = 0;
+    end
+    
+    LEFT: begin
         if(in_valid) begin
             map_w[addr_map_r]   = {in_data,6'b0};
-            addr_map_w          = (addr_map_r==2815)?2560:addr_map_r+1;
+            addr_map_w          = (addr_map_r==120)?110:addr_map_r+1;
             
-            if(colume_cntr_r==255)begin
-                colume_cntr_w   = 0;
-                row_cntr_w      = (row_cntr_r==255)?0:row_cntr_r+1;
+            row_cntr_w = (row_cntr_r==px_row_cntr_r+5) ? px_row_cntr_r-5 : row_cntr_r+1;
+            col_cntr_w = (row_cntr_r==px_row_cntr_r+5) ? col_cntr_r+1    : col_cntr_r;
+
+            if(col_cntr_r==px_col_cntr_r+5 && row_cntr_r==px_row_cntr_r+4) begin
+                state_w = MID;
+                // row_cntr_w = px_row_cntr_r+5;
+                // col_cntr_w = px_col_cntr_r+5;
             end
-            else begin
-                colume_cntr_w   = colume_cntr_r+1;
-            end
-        end        
+
+        end
     end
     
     MID: begin
-        if(row_cntr_r==255 && colume_cntr_r==255) begin
+        if(row_cntr_r==255 && col_cntr_r==255 && in_valid) begin
             state_w = ENDING;
         end
         
         if(in_valid) begin
             map_w[addr_map_r]   = {in_data,6'b0};
-            addr_map_w          = (addr_map_r==2815)?2560:addr_map_r+1;
+            addr_map_w          = (addr_map_r==120)?110:addr_map_r+1;
             
-            if(colume_cntr_r==255)begin
-                colume_cntr_w   = 0;
+            if(col_cntr_r==255)begin
+                col_cntr_w   = 0;
                 row_cntr_w      = (row_cntr_r==255)?0:row_cntr_r+1;
             end
             else begin
-                colume_cntr_w   = colume_cntr_r+1;
+                col_cntr_w   = col_cntr_r+1;
             end
         end
         
@@ -116,18 +131,18 @@ end
 always @(*) begin
     in_buffer_w         = in_buffer_r;
     addr_map_w          = addr_map_r;
-    colume_cntr_w       = colume_cntr_r;
+    col_cntr_w       = col_cntr_r;
     row_cntr_w          = row_cntr_r;
     
     if(in_valid) begin
         // in_buffer_w = {in_data,6'b0};
         
-        if(colume_cntr_r==255)begin
-            colume_cntr_w   = 0;
+        if(col_cntr_r==255)begin
+            col_cntr_w   = 0;
             row_cntr_w      = (row_cntr_r==255)?0:row_cntr_r+1;
         end
         else begin
-            colume_cntr_w   = colume_cntr_r+1;
+            col_cntr_w   = col_cntr_r+1;
         end
         
         
@@ -163,26 +178,28 @@ end
 
 always @(posedge clk or posedge rst) begin
     if (rst) begin
-        out_valid       <= 0;
-        in_buffer_r     <= 0;
-        addr_map_r      <= 0;
-        row_cntr_r      <= 0;
-        colume_cntr_r   <= 0;
-        pixel_cntr_r    <= 0;    
+        out_valid        <= 0;
+        // in_buffer_r      <= 0;
+        addr_map_r       <= 0;
+        row_cntr_r       <= 0;
+        col_cntr_r    <= 0;
+        px_row_cntr_r    <= 0;    
+        px_col_cntr_r <= 0;    
         
-        for for(i=0;j<2816;i=i+1) begin
-            map_r[i]    <= 0;
+        for for(i=0;j<120;i=i+1) begin
+            map_r[i]     <= 0;
         end
     end
     else begin
-        out_valid       <= out_valid_w;
-        in_buffer_r     <= in_buffer_w;
-        addr_map_r      <= addr_map_w;
-        row_cntr_r      <= row_cntr_w;
-        colume_cntr_r   <= colume_cntr_w;
-        pixel_cntr_r    <= pixel_cntr_w;
+        out_valid        <= out_valid_w;
+        // in_buffer_r      <= in_buffer_w;
+        addr_map_r       <= addr_map_w;
+        row_cntr_r       <= row_cntr_w;
+        col_cntr_r    <= col_cntr_w;
+        px_row_cntr_r    <= px_row_cntr_w;
+        px_col_cntr_r <= px_col_cntr_w;
         
-        for for(i=0;j<2816;i=i+1) begin
+        for for(i=0;j<120;i=i+1) begin
             map_r[i]    <=  map_w[i];
         end
     end
