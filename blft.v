@@ -50,8 +50,8 @@ reg  [7:0]  px_col_cntr_r;
 reg  [7:0]  px_col_cntr_w;
 
 
-reg  [13:0] map_r[0:120]
-reg  [13:0] map_w[0:120]
+reg  [13:0] map_r[0:120];
+reg  [13:0] map_w[0:120];
 
 integer i;
 
@@ -75,11 +75,11 @@ always@(*) begin
     out_data_w      = out_data;
     finish_w        = finish;
     
-    for for(i=0;j<120;i=i+1) begin
+    for(i=0;i<120;i=i+1) begin
         map_w[i]    = map_r[i];
     end
     
-    case(state_r):
+    case(state_r)
     START: begin
         state_w = LEFT;
         col_cntr_w = 0;
@@ -119,7 +119,7 @@ always@(*) begin
     end
     
     RIGHT: begin
-        if(valid) begin
+        if(in_valid) begin
             map_w[addr_map_r]   = {in_data,6'b0};
             addr_map_w          = 0;
             
@@ -176,7 +176,7 @@ always @(posedge clk or posedge rst) begin
         px_row_cntr_r   <= 0;    
         px_col_cntr_r   <= 0;
         
-        for for(i=0;j<120;i=i+1) begin
+        for(i=0;i<120;i=i+1) begin
             map_r[i]    <= 0;
         end
     end
@@ -192,7 +192,7 @@ always @(posedge clk or posedge rst) begin
         px_row_cntr_r   <= px_row_cntr_w;
         px_col_cntr_r   <= px_col_cntr_w;
         
-        for for(i=0;j<120;i=i+1) begin
+        for(i=0;i<120;i=i+1) begin
             map_r[i]    <=  map_w[i];
         end
     end
