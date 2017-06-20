@@ -19,8 +19,11 @@ module TESTBED;
     
 initial begin
     `ifdef RTL
-        $dumpfile("blft.vcd");
-        $dumpvars(0, TESTBED);
+        $fsdbDumpfile("blft.fsdb");
+        $fsdbDumpvars;
+        $fsdbDumpMDA;
+        // $dumpfile("blft.vcd");
+        // $dumpvars(0, TESTBED);
     `endif
     `ifdef GATE
         $sdf_annotate("blft_SYN.sdf",blft_CORE);
@@ -40,8 +43,8 @@ wire        in_valid;
 wire        out_valid;
 wire [15:0] in_addr;
 wire [15:0] out_addr;
-wire [8:0]  in_data;
-wire [8:0]  out_data;
+wire [7:0]  in_data;
+wire [7:0]  out_data;
 wire        finish;
 
 blft blft_CORE(

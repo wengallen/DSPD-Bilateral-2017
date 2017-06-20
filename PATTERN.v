@@ -26,7 +26,7 @@ input             finish;
 
 //////////////////////////////////////////////
 integer i, j, latency, total_latency;
-integer fptr,frtr1,frtr2,cnt,error,error_loose;
+integer fptr,frtr1,frtr2,cnt,error;
 parameter data_count = 1; // num of dataset
 
 reg [7:0] in_Real_save [0:65535];
@@ -46,13 +46,11 @@ initial begin
     total_latency = 0;
     latency = 0;
     error =0;
-    error_loose=0;
     
     //LOAD  input data
-    $display("\n\n ==== In_save ===============");
+    $display("\n\n ==== Input saved ===============");
     frtr1 = $fopen("img1.txt","r");
     for(j=0;j<data_count;j=j+1) begin
-        $display("\n == input %1d Real ==",j+1);
         for(i=65536*j;i<65536*j+65536;i=i+1)  begin 
             cnt=$fscanf(frtr1, "%d",in_Real_save[i]); 
             // $display("%d ", in_Real_save[i]);
@@ -61,10 +59,9 @@ initial begin
     $fclose(frtr1);
     
     //LOAD Correct ans
-    $display("\n\n ==== Ans_save ===============");
+    $display("\n ==== Golden saved ===============");
     frtr2 = $fopen("gold1.txt","r");
     for(j=0;j<data_count;j=j+1) begin
-        $display("\n == ans %1d Real ==",j+1);
         for(i=65536*j;i<65536*j+65536;i=i+1)  begin 
             cnt=$fscanf(frtr2, "%d",ans_Real_save[i]); 
             // $display("%d ", ans_Real_save[i]);
@@ -98,12 +95,20 @@ initial begin
         @(negedge clk)  in_valid = 1;
         in_data = in_Real_save[in_addr];
         total_latency = total_latency + 1;
-        for(i=(65536*j+1);i<(65536*j+65536);i=i+1) begin
+        
+        while(!finish && total_latency<900000) begin
             @(negedge clk) total_latency = total_latency + 1;
+            if(total_latency%50000 ==0) $display(" total_latency = %d. ",total_latency);
+            
             in_data = in_Real_save[in_addr];
+            
+            if(out_valid) begin
+                out_Real_save[out_addr] = out_data;
+            end
+            
         end
         
-        @(negedge clk)  in_valid = 0; //inout_data = 28'bz;
+        @(negedge clk)  in_valid = 0; 
         
         if(out_valid)
         begin
@@ -116,19 +121,20 @@ initial begin
         
         
         latency = 0;
+        /*
         while(!out_valid) begin
-            
             @(negedge clk) latency = latency + 1;
-            if(latency == 2000) 
-            begin
+            if(latency == 2000) begin
                 $display("--------------------------------------------------------------");
-                $display("                   #( ‵□′)───C＜─___-)|||                    ");
-                $display("         j= %d         Latency too long.                       ",j);
+                $display("                   #( ‵□′)───C＜─___-)|||                     ");
+                $display("         j= %d         Latency too long.                      ",j);
                 $display("--------------------------------------------------------------");                        
                 $finish;
             end
         end
+        */
         
+        /*
         if(out_valid) total_latency = total_latency + latency;
         for(i=(65536*j);i<(65536*j+65536);i=i+1) begin
             if(out_valid) begin
@@ -138,19 +144,20 @@ initial begin
                 out_Real_save[out_addr] = out_data;
             end
         end
-        
+        */
         
         for(i=(65536*j);i<(65536*j+65536);i=i+1) begin
-            if(out_Real_save[i] != ans_Real_save[i]) begin
-                error=error+1;
-                if(out_Real_save[i] - ans_Real_save[i]>1||out_Real_save[i] - ans_Real_save[i]<-1) error_loose=error_loose+1;
-                $display("--------------------------------------------------------------");
-                $display("                   #( ‵□′)───C＜─___-)|||                    ");
-                $display("                      WRONG Real OUTPUT.                      ");
-                $display("                        j= %d  #%d                            ",j,i-65536*j);
-                $display(" Your output is %d, but the answer is %d", out_Real_save[i], ans_Real_save[i]);
-                $display("--------------------------------------------------------------");
-                //$finish;
+            if( i>1279 && i<64256 && i%256 >4 && i%256<251 ) begin
+                if(out_Real_save[i] != ans_Real_save[i]) begin
+                    error=error+1;
+                    $display("--------------------------------------------------------------");
+                    $display("                   #( ‵□′)───C＜─___-)|||                    ");
+                    $display("                      WRONG Real OUTPUT.                      ");
+                    $display("                        j= %d  #%d                            ",j,i-65536*j);
+                    $display(" Your output is %d, but the answer is %d", out_Real_save[i], ans_Real_save[i]);
+                    $display("--------------------------------------------------------------");
+                    //$finish;
+                end
             end
         end
         
@@ -169,10 +176,10 @@ initial begin
         $display("==== Out_save[%1d] ====== \n",j);
         $fdisplay(fptr, "==== Out_save[%1d] ====== \n",j);
         
-        $display("[ Re ] || [  Correct  ] ");
+        $display("[ Result ] || [  Correct  ] ");
         for(i=(65536*j); i<(65536*j+65536); i=i+1)   begin
 			$fdisplay(fptr, "%d ", out_Real_save[i]);
-			$display ( "%d || %d", out_Real_save[i], ans_Real_save[i]);
+			// $display ( "%5d || %5d", out_Real_save[i], ans_Real_save[i]);
 		end
 		$fdisplay(fptr, "\n");
 		$display ("\n");
@@ -184,7 +191,7 @@ initial begin
     $display("\033[1;33mWell Done \033[m");
     $display("\033[1;33m********************************\033[m");
     $display(" \n ");
-    if (error >5) begin
+    if (error < 5) begin
         $display("\033[1;35m********************************\033[m");
         $display("\033[1;35m      ╭╮         \033[m");
         $display("\033[1;35m      ││           \033[m");
@@ -199,15 +206,14 @@ initial begin
     else begin
         $display("\033[1;35m !!!!!! Too Much ERROR !!!!!! \033[m");
     end
+    
     $display(" \n ");
     $display("\033[1;32m********************************\033[m");
     $display("\033[1;32mYour total latency is = %d cycles. \033[m",total_latency );
     $display("\033[1;32m********************************\033[m");
     // $display(" \n ");
     $display("\033[1;36m********************************\033[m");
-    $display("\033[1;36mYour total Error is = %d over 64 points. \033[m",error );
-    $display("\033[1;36m********************************\033[m");
-    $display("\033[1;36mYour Looes Error is = %d over 64 points. \033[m",error_loose );
+    $display("\033[1;36mYour total Error is = %d . \033[m",error );
     $display("\033[1;36m********************************\033[m");
     $display("Congratulations!!!. \n\n");
     

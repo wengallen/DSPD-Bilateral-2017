@@ -112,7 +112,7 @@ always@(*) begin
             col_cntr_w    = (row_cntr_r==px_row_cntr_r+5) ? col_cntr_r+1    : col_cntr_r;
             px_col_cntr_w = (row_cntr_r==px_row_cntr_r+5) ? px_col_cntr_r+1 : px_col_cntr_r;
             
-            if(col_cntr_r==255 && row_cntr_r==px_col_cntr_r+4) begin
+            if(col_cntr_r==255 && row_cntr_r==px_row_cntr_r+4) begin
                 state_w = RIGHT;
             end
         end
@@ -130,6 +130,9 @@ always@(*) begin
             
             if(col_cntr_r==255 && row_cntr_r==255) begin
                 state_w = ENDING;
+            end
+            else begin
+                state_w = LEFT;
             end
         end
     end
