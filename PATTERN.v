@@ -6,30 +6,32 @@ out_valid,
 in_addr,
 out_addr,
 in_data,
-out_data
+out_data,
+finish
 );
 
 parameter cycle = 10.0;
 
 //////////////////////////////////////////////
 
-output reg               clk;
-output reg               rst;
-output reg               in_valid;
-input                    out_valid;
-input             [15:0] in_addr;
-input             [15:0] out_addr;
-output reg signed [8:0]  in_data;
-input      signed [8:0]  out_data;
+output reg        clk;
+output reg        rst;
+output reg        in_valid;
+input             out_valid;
+input      [15:0] in_addr;
+input      [15:0] out_addr;
+output reg [7:0]  in_data;
+input      [7:0]  out_data;
+input             finish;
 
 //////////////////////////////////////////////
 integer i, j, latency, total_latency;
 integer fptr,frtr1,frtr2,cnt,error,error_loose;
 parameter data_count = 1; // num of dataset
 
-reg signed [8:0] in_Real_save [0:65535];
-reg signed [8:0] ans_Real_save[0:65535];
-reg signed [8:0] out_Real_save[0:65535];
+reg [7:0] in_Real_save [0:65535];
+reg [7:0] ans_Real_save[0:65535];
+reg [7:0] out_Real_save[0:65535];
 
 
 always #(cycle/2.0) clk = ~clk;
@@ -94,11 +96,11 @@ initial begin
         
         //CHANGE inout, Then drop to 28'bZ
         @(negedge clk)  in_valid = 1;
-        in_data = in_Real_save[(65536*j)];
+        in_data = in_Real_save[in_addr];
         total_latency = total_latency + 1;
         for(i=(65536*j+1);i<(65536*j+65536);i=i+1) begin
             @(negedge clk) total_latency = total_latency + 1;
-            in_data = in_Real_save[(i)];
+            in_data = in_Real_save[in_addr];
         end
         
         @(negedge clk)  in_valid = 0; //inout_data = 28'bz;
@@ -133,7 +135,7 @@ initial begin
                 @(negedge clk) total_latency = total_latency; 
                 // Latency: the time from beginning of input to beginning of output
                 // @(negedge clk) total_latency = total_latency + 1;
-                out_Real_save[i] = out_data;
+                out_Real_save[out_addr] = out_data;
             end
         end
         

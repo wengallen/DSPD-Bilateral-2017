@@ -42,6 +42,7 @@ wire [15:0] in_addr;
 wire [15:0] out_addr;
 wire [8:0]  in_data;
 wire [8:0]  out_data;
+wire        finish;
 
 blft blft_CORE(
 .clk(clk),
@@ -51,7 +52,8 @@ blft blft_CORE(
 .in_addr(in_addr),
 .out_addr(out_addr),
 .in_data(in_data),
-.out_data(out_data)
+.out_data(out_data),
+.finish(finish)
 );
 
 PATTERN PAT_GEN_LOGIC_ANA(
@@ -62,7 +64,8 @@ PATTERN PAT_GEN_LOGIC_ANA(
 .in_addr(in_addr),
 .out_addr(out_addr),
 .in_data(in_data),
-.out_data(out_data)
+.out_data(out_data),
+.finish(finish)
 );
 
 
