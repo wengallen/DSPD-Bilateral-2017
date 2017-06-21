@@ -89,7 +89,7 @@ initial begin
     
     
     //Run #6 Patterns, $finish when any error occur
-    for(j=0;j<data_count;j=j+1) begin
+    // for(j=0;j<data_count;j=j+1) begin
         
         //CHANGE inout, Then drop to 28'bZ
         @(negedge clk)  in_valid = 1;
@@ -122,12 +122,13 @@ initial begin
         
         latency = 0;
         /*
+        // Wait for output valid
         while(!out_valid) begin
             @(negedge clk) latency = latency + 1;
             if(latency == 2000) begin
                 $display("--------------------------------------------------------------");
                 $display("                   #( ‵□′)───C＜─___-)|||                     ");
-                $display("         j= %d         Latency too long.                      ",j);
+                $display("                     Latency too long.                       ");
                 $display("--------------------------------------------------------------");                        
                 $finish;
             end
@@ -135,8 +136,9 @@ initial begin
         */
         
         /*
+        // Save output Data
         if(out_valid) total_latency = total_latency + latency;
-        for(i=(65536*j);i<(65536*j+65536);i=i+1) begin
+        for(i=0;i<65536;i=i+1) begin
             if(out_valid) begin
                 @(negedge clk) total_latency = total_latency; 
                 // Latency: the time from beginning of input to beginning of output
@@ -146,14 +148,14 @@ initial begin
         end
         */
         
-        for(i=(65536*j);i<(65536*j+65536);i=i+1) begin
+        //Check with Golden Data
+        for(i=0;i<65536;i=i+1) begin
             if( i>1279 && i<64256 && i%256 >4 && i%256<251 ) begin
                 if(out_Real_save[i] != ans_Real_save[i]) begin
                     error=error+1;
-                    $display("--------------------------------------------------------------");
-                    $display("                   #( ‵□′)───C＜─___-)|||                    ");
-                    $display("                      WRONG Real OUTPUT.                      ");
-                    $display("                        j= %d  #%d                            ",j,i-65536*j);
+                    // $display("--------------------------------------------------------------");
+                    // $display("                   #( ‵□′)───C＜─___-)|||                    ");
+                    $display("                      WRONG OUTPUT. #%d                      ",i);
                     $display(" Your output is %d, but the answer is %d", out_Real_save[i], ans_Real_save[i]);
                     $display("--------------------------------------------------------------");
                     //$finish;
@@ -165,25 +167,25 @@ initial begin
         @(negedge clk);
         @(negedge clk);
         
-    end
+    // end
     
     
     
     //IF NO ERROR
     fptr = $fopen("img1_out_me.txt");
     
-    for(j=0; j<data_count; j=j+1)   begin
-        $display("==== Out_save[%1d] ====== \n",j);
-        $fdisplay(fptr, "==== Out_save[%1d] ====== \n",j);
+    // for(j=0; j<data_count; j=j+1)   begin
+        // $display("==== Out_save ====== \n");
+        // $display("[ Result ] || [  Correct  ] ");
+        // $fdisplay(fptr, "==== Out_save ====== \n");
         
-        $display("[ Result ] || [  Correct  ] ");
-        for(i=(65536*j); i<(65536*j+65536); i=i+1)   begin
+        for(i=0; i<65536; i=i+1)   begin
 			$fdisplay(fptr, "%d ", out_Real_save[i]);
 			// $display ( "%5d || %5d", out_Real_save[i], ans_Real_save[i]);
 		end
 		$fdisplay(fptr, "\n");
-		$display ("\n");
-	end
+		// $display ("\n");
+	// end
 	$fclose(fptr);
     
     
@@ -211,7 +213,6 @@ initial begin
     $display("\033[1;32m********************************\033[m");
     $display("\033[1;32mYour total latency is = %d cycles. \033[m",total_latency );
     $display("\033[1;32m********************************\033[m");
-    // $display(" \n ");
     $display("\033[1;36m********************************\033[m");
     $display("\033[1;36mYour total Error is = %d . \033[m",error );
     $display("\033[1;36m********************************\033[m");
@@ -219,12 +220,6 @@ initial begin
     
     $finish;
 end
-
-//==== sequential part ===================
-/* always@(posedge clk) begin
-   inout_data <= in_data;
-end */
-
 
 endmodule
     
