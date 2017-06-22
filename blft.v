@@ -30,6 +30,8 @@ output        finish;
 //==== reg/wire ==========================
 reg         out_valid;
 reg         out_valid_w;
+reg  [15:0] out_addr;
+reg  [15:0] out_addr_w;
 reg  [7:0]  out_data;
 reg  [7:0]  out_data_w;
 reg         finish;
@@ -66,7 +68,7 @@ parameter RIGHT  =3;
 parameter ENDING =4;
 
 assign in_addr  = { row_cntr_r    , col_cntr_r };
-assign out_addr = { px_row_cntr_r , px_col_cntr_r };
+// assign out_addr_w = { px_row_cntr_r , px_col_cntr_r };
 
 always@(*) begin
     state_w         = state_r;
@@ -77,7 +79,9 @@ always@(*) begin
     row_cntr_w      = row_cntr_r;
     px_row_cntr_w   = px_row_cntr_w;
     px_col_cntr_w   = px_col_cntr_w;
+
     out_valid_w     = out_valid;
+    out_addr_w      = { px_row_cntr_r , px_col_cntr_r };
     out_data_w      = out_data;
     finish_w        = finish;
     
@@ -108,7 +112,7 @@ always@(*) begin
             row_cntr_w    = (row_cntr_r==px_row_cntr_r+5) ? px_row_cntr_r-5 : row_cntr_r+1;
             col_cntr_w    = (row_cntr_r==px_row_cntr_r+5) ? col_cntr_r+1    : col_cntr_r;
             
-            if(col_cntr_r==px_col_cntr_r+4 && row_cntr_r==px_row_cntr_r+5) begin
+            if(col_cntr_r==px_col_cntr_r+5 && row_cntr_r==px_row_cntr_r+5) begin
                 state_w = MID;
                 sub_state_w = 0;
             end
@@ -117,7 +121,7 @@ always@(*) begin
     
     MID: begin
         if(in_valid) begin
-            map_w[addr_map_r]   = {in_data,6'b0};
+            // map_w[addr_map_r]   = {in_data,6'b0};
             addr_map_w          = (addr_map_r==120)?110:addr_map_r+1;
             
             row_cntr_w    = (row_cntr_r==px_row_cntr_r+5) ? px_row_cntr_r-5 : row_cntr_r+1;
@@ -146,10 +150,11 @@ always@(*) begin
         10: begin
             sub_state_w = 0;
             in_buffer_w[sub_state_r] = in_data;
+            map_w[sub_state_r+110]   = {in_data,6'b0};
             for(i=0;i<110;i=i+1) map_w[i] = map_r[i+11];
-            for(i=0;i<11;i=i+1)  map_w[i+110] = in_buffer_r[i];
+            for(i=0;i<10;i=i+1)  map_w[i+110] = {in_buffer_r[i],6'b0};
             out_valid_w = 1;
-            out_data = map_r[60];
+            out_data_w = map_r[60][13:6];
         end
         
         endcase
@@ -209,6 +214,7 @@ always @(posedge clk or posedge rst) begin
         state_r         <= 0;
         sub_state_r     <= 0;
         out_valid       <= 0;
+        out_addr        <= 0;
         out_data        <= 0;
         finish          <= 0;
         
@@ -229,6 +235,7 @@ always @(posedge clk or posedge rst) begin
         state_r         <= state_w;
         sub_state_r     <= sub_state_w;
         out_valid       <= out_valid_w;
+        out_addr        <= out_addr_w;
         out_data        <= out_data_w;
         finish          <= finish_w;
         

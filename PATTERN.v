@@ -53,7 +53,6 @@ initial begin
     for(j=0;j<data_count;j=j+1) begin
         for(i=65536*j;i<65536*j+65536;i=i+1)  begin 
             cnt=$fscanf(frtr1, "%d",in_Real_save[i]); 
-            // $display("%d ", in_Real_save[i]);
         end
     end
     $fclose(frtr1);
@@ -64,7 +63,6 @@ initial begin
     for(j=0;j<data_count;j=j+1) begin
         for(i=65536*j;i<65536*j+65536;i=i+1)  begin 
             cnt=$fscanf(frtr2, "%d",ans_Real_save[i]); 
-            // $display("%d ", ans_Real_save[i]);
         end
     end
     $fclose(frtr2);
@@ -98,14 +96,12 @@ initial begin
         
         while(!finish && total_latency<900000) begin
             @(negedge clk) total_latency = total_latency + 1;
-            if(total_latency%50000 ==0) $display(" total_latency = %d. ",total_latency);
-            
             in_data = in_Real_save[in_addr];
-            
             if(out_valid) begin
                 out_Real_save[out_addr] = out_data;
             end
             
+            if(total_latency%100000 ==0) $display(" total_latency = %d. ",total_latency);
         end
         
         @(negedge clk)  in_valid = 0; 
@@ -151,12 +147,14 @@ initial begin
         //Check with Golden Data
         for(i=0;i<65536;i=i+1) begin
             if( i>1279 && i<64256 && i%256 >4 && i%256<251 ) begin
-                if(out_Real_save[i] != ans_Real_save[i]) begin
+                if(out_Real_save[i] != in_Real_save[i]) begin
+                // if(out_Real_save[i] != ans_Real_save[i]) begin
                     error=error+1;
                     // $display("--------------------------------------------------------------");
                     // $display("                   #( ‵□′)───C＜─___-)|||                    ");
-                    $display("                      WRONG OUTPUT. #%d                      ",i);
-                    $display(" Your output is %d, but the answer is %d", out_Real_save[i], ans_Real_save[i]);
+                    $display("                      WRONG OUTPUT. #%5d                      ",i);
+                    $display(" Your output is %3d, but the answer is %3d", out_Real_save[i], in_Real_save[i]);
+                    // $display(" Your output is %d, but the answer is %d", out_Real_save[i], ans_Real_save[i]);
                     $display("--------------------------------------------------------------");
                     //$finish;
                 end
@@ -211,10 +209,10 @@ initial begin
     
     $display(" \n ");
     $display("\033[1;32m********************************\033[m");
-    $display("\033[1;32mYour total latency is = %d cycles. \033[m",total_latency );
+    $display("\033[1;32mYour total latency is = %8d cycles. \033[m",total_latency );
     $display("\033[1;32m********************************\033[m");
     $display("\033[1;36m********************************\033[m");
-    $display("\033[1;36mYour total Error is = %d . \033[m",error );
+    $display("\033[1;36mYour total Error is   = %8d . \033[m",error );
     $display("\033[1;36m********************************\033[m");
     $display("Congratulations!!!. \n\n");
     
