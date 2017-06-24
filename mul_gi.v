@@ -1,9 +1,4 @@
-// Output SNR ≥ 40 dB (test pattern provided)
-// Latency ~= 70k cycles
-// Clock frequency: 100MHz
-// Technology: UMC 0.18μm process
 
-// Bilateral Filter
 module mul_gi(
     i000_g,i001_g,i002_g,i003_g,i004_g,i005_g,i006_g,i007_g,i008_g,i009_g,
     i010_g,i011_g,i012_g,i013_g,i014_g,i015_g,i016_g,i017_g,i018_g,i019_g,

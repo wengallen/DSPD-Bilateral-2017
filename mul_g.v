@@ -1,10 +1,5 @@
-// Output SNR ≥ 40 dB (test pattern provided)
-// Latency ~= 70k cycles
-// Clock frequency: 100MHz
-// Technology: UMC 0.18μm process
 
-// Bilateral Filter
-module gaussian(
+module mul_g(
     i000_n,i001_n,i002_n,i003_n,i004_n,i005_n,i006_n,i007_n,i008_n,i009_n,
     i010_n,i011_n,i012_n,i013_n,i014_n,i015_n,i016_n,i017_n,i018_n,i019_n,
     i020_n,i021_n,i022_n,i023_n,i024_n,i025_n,i026_n,i027_n,i028_n,i029_n,
@@ -17,18 +12,18 @@ module gaussian(
     i090_n,i091_n,i092_n,i093_n,i094_n,i095_n,i096_n,i097_n,i098_n,i099_n,
     i100_n,i101_n,i102_n,i103_n,i104_n,i105_n,i106_n,i107_n,i108_n,i109_n,
     i110_n,i111_n,i112_n,i113_n,i114_n,i115_n,i116_n,i117_n,i118_n,i119_n,i120_n,
-    i000_r,i001_r,i002_r,i003_r,i004_r,i005_r,i006_r,i007_r,i008_r,i009_r,
-    i010_r,i011_r,i012_r,i013_r,i014_r,i015_r,i016_r,i017_r,i018_r,i019_r,
-    i020_r,i021_r,i022_r,i023_r,i024_r,i025_r,i026_r,i027_r,i028_r,i029_r,
-    i030_r,i031_r,i032_r,i033_r,i034_r,i035_r,i036_r,i037_r,i038_r,i039_r,
-    i040_r,i041_r,i042_r,i043_r,i044_r,i045_r,i046_r,i047_r,i048_r,i049_r,
-    i050_r,i051_r,i052_r,i053_r,i054_r,i055_r,i056_r,i057_r,i058_r,i059_r,
-    i060_r,i061_r,i062_r,i063_r,i064_r,i065_r,i066_r,i067_r,i068_r,i069_r,
-    i070_r,i071_r,i072_r,i073_r,i074_r,i075_r,i076_r,i077_r,i078_r,i079_r,
-    i080_r,i081_r,i082_r,i083_r,i084_r,i085_r,i086_r,i087_r,i088_r,i089_r,
-    i090_r,i091_r,i092_r,i093_r,i094_r,i095_r,i096_r,i097_r,i098_r,i099_r,
-    i100_r,i101_r,i102_r,i103_r,i104_r,i105_r,i106_r,i107_r,i108_r,i109_r,
-    i110_r,i111_r,i112_r,i113_r,i114_r,i115_r,i116_r,i117_r,i118_r,i119_r,i120_r,
+    reg000,reg001,reg002,reg003,reg004,reg005,reg006,reg007,reg008,reg009,
+    reg010,reg011,reg012,reg013,reg014,reg015,reg016,reg017,reg018,reg019,
+    reg020,reg021,reg022,reg023,reg024,reg025,reg026,reg027,reg028,reg029,
+    reg030,reg031,reg032,reg033,reg034,reg035,reg036,reg037,reg038,reg039,
+    reg040,reg041,reg042,reg043,reg044,reg045,reg046,reg047,reg048,reg049,
+    reg050,reg051,reg052,reg053,reg054,reg055,reg056,reg057,reg058,reg059,
+    reg060,reg061,reg062,reg063,reg064,reg065,reg066,reg067,reg068,reg069,
+    reg070,reg071,reg072,reg073,reg074,reg075,reg076,reg077,reg078,reg079,
+    reg080,reg081,reg082,reg083,reg084,reg085,reg086,reg087,reg088,reg089,
+    reg090,reg091,reg092,reg093,reg094,reg095,reg096,reg097,reg098,reg099,
+    reg100,reg101,reg102,reg103,reg104,reg105,reg106,reg107,reg108,reg109,
+    reg110,reg111,reg112,reg113,reg114,reg115,reg116,reg117,reg118,reg119,reg120,
     out000,out001,out002,out003,out004,out005,out006,out007,out008,out009,
     out010,out011,out012,out013,out014,out015,out016,out017,out018,out019,
     out020,out021,out022,out023,out024,out025,out026,out027,out028,out029,
@@ -58,18 +53,18 @@ input  [7:0]  i090_n,i091_n,i092_n,i093_n,i094_n,i095_n,i096_n,i097_n,i098_n,i09
 input  [7:0]  i100_n,i101_n,i102_n,i103_n,i104_n,i105_n,i106_n,i107_n,i108_n,i109_n;
 input  [7:0]  i110_n,i111_n,i112_n,i113_n,i114_n,i115_n,i116_n,i117_n,i118_n,i119_n,i120_n;
 
-input  [13:0] i000_r,i001_r,i002_r,i003_r,i004_r,i005_r,i006_r,i007_r,i008_r,i009_r;
-input  [13:0] i010_r,i011_r,i012_r,i013_r,i014_r,i015_r,i016_r,i017_r,i018_r,i019_r;
-input  [13:0] i020_r,i021_r,i022_r,i023_r,i024_r,i025_r,i026_r,i027_r,i028_r,i029_r;
-input  [13:0] i030_r,i031_r,i032_r,i033_r,i034_r,i035_r,i036_r,i037_r,i038_r,i039_r;
-input  [13:0] i040_r,i041_r,i042_r,i043_r,i044_r,i045_r,i046_r,i047_r,i048_r,i049_r;
-input  [13:0] i050_r,i051_r,i052_r,i053_r,i054_r,i055_r,i056_r,i057_r,i058_r,i059_r;
-input  [13:0] i060_r,i061_r,i062_r,i063_r,i064_r,i065_r,i066_r,i067_r,i068_r,i069_r;
-input  [13:0] i070_r,i071_r,i072_r,i073_r,i074_r,i075_r,i076_r,i077_r,i078_r,i079_r;
-input  [13:0] i080_r,i081_r,i082_r,i083_r,i084_r,i085_r,i086_r,i087_r,i088_r,i089_r;
-input  [13:0] i090_r,i091_r,i092_r,i093_r,i094_r,i095_r,i096_r,i097_r,i098_r,i099_r;
-input  [13:0] i100_r,i101_r,i102_r,i103_r,i104_r,i105_r,i106_r,i107_r,i108_r,i109_r;
-input  [13:0] i110_r,i111_r,i112_r,i113_r,i114_r,i115_r,i116_r,i117_r,i118_r,i119_r,i120_r;
+input  [13:0] reg000,reg001,reg002,reg003,reg004,reg005,reg006,reg007,reg008,reg009;
+input  [13:0] reg010,reg011,reg012,reg013,reg014,reg015,reg016,reg017,reg018,reg019;
+input  [13:0] reg020,reg021,reg022,reg023,reg024,reg025,reg026,reg027,reg028,reg029;
+input  [13:0] reg030,reg031,reg032,reg033,reg034,reg035,reg036,reg037,reg038,reg039;
+input  [13:0] reg040,reg041,reg042,reg043,reg044,reg045,reg046,reg047,reg048,reg049;
+input  [13:0] reg050,reg051,reg052,reg053,reg054,reg055,reg056,reg057,reg058,reg059;
+input  [13:0] reg060,reg061,reg062,reg063,reg064,reg065,reg066,reg067,reg068,reg069;
+input  [13:0] reg070,reg071,reg072,reg073,reg074,reg075,reg076,reg077,reg078,reg079;
+input  [13:0] reg080,reg081,reg082,reg083,reg084,reg085,reg086,reg087,reg088,reg089;
+input  [13:0] reg090,reg091,reg092,reg093,reg094,reg095,reg096,reg097,reg098,reg099;
+input  [13:0] reg100,reg101,reg102,reg103,reg104,reg105,reg106,reg107,reg108,reg109;
+input  [13:0] reg110,reg111,reg112,reg113,reg114,reg115,reg116,reg117,reg118,reg119,reg120;
 
 
 output reg [27:0] out000,out001,out002,out003,out004,out005,out006,out007,out008,out009;
@@ -212,127 +207,127 @@ always@(*) begin
         out120 = {i120_n,6'b0} * 14'b0_000100; //0.0625
     end
     else begin
-        out000 = {{8'b0,i000_r},6'b0};
-        out001 = {{8'b0,i001_r},6'b0};
-        out002 = {{8'b0,i002_r},6'b0};
-        out003 = {{8'b0,i003_r},6'b0};
-        out004 = {{8'b0,i004_r},6'b0};
-        out005 = {{8'b0,i005_r},6'b0};
-        out006 = {{8'b0,i006_r},6'b0};
-        out007 = {{8'b0,i007_r},6'b0};
-        out008 = {{8'b0,i008_r},6'b0};
-        out009 = {{8'b0,i009_r},6'b0};
-        out010 = {{8'b0,i010_r},6'b0};
-        out011 = {{8'b0,i011_r},6'b0};
-        out012 = {{8'b0,i012_r},6'b0};
-        out013 = {{8'b0,i013_r},6'b0};
-        out014 = {{8'b0,i014_r},6'b0};
-        out015 = {{8'b0,i015_r},6'b0};
-        out016 = {{8'b0,i016_r},6'b0};
-        out017 = {{8'b0,i017_r},6'b0};
-        out018 = {{8'b0,i018_r},6'b0};
-        out019 = {{8'b0,i019_r},6'b0};
-        out020 = {{8'b0,i020_r},6'b0};
-        out021 = {{8'b0,i021_r},6'b0};
-        out022 = {{8'b0,i022_r},6'b0};
-        out023 = {{8'b0,i023_r},6'b0};
-        out024 = {{8'b0,i024_r},6'b0};
-        out025 = {{8'b0,i025_r},6'b0};
-        out026 = {{8'b0,i026_r},6'b0};
-        out027 = {{8'b0,i027_r},6'b0};
-        out028 = {{8'b0,i028_r},6'b0};
-        out029 = {{8'b0,i029_r},6'b0};
-        out030 = {{8'b0,i030_r},6'b0};
-        out031 = {{8'b0,i031_r},6'b0};
-        out032 = {{8'b0,i032_r},6'b0};
-        out033 = {{8'b0,i033_r},6'b0};
-        out034 = {{8'b0,i034_r},6'b0};
-        out035 = {{8'b0,i035_r},6'b0};
-        out036 = {{8'b0,i036_r},6'b0};
-        out037 = {{8'b0,i037_r},6'b0};
-        out038 = {{8'b0,i038_r},6'b0};
-        out039 = {{8'b0,i039_r},6'b0};
-        out040 = {{8'b0,i040_r},6'b0};
-        out041 = {{8'b0,i041_r},6'b0};
-        out042 = {{8'b0,i042_r},6'b0};
-        out043 = {{8'b0,i043_r},6'b0};
-        out044 = {{8'b0,i044_r},6'b0};
-        out045 = {{8'b0,i045_r},6'b0};
-        out046 = {{8'b0,i046_r},6'b0};
-        out047 = {{8'b0,i047_r},6'b0};
-        out048 = {{8'b0,i048_r},6'b0};
-        out049 = {{8'b0,i049_r},6'b0};
-        out050 = {{8'b0,i050_r},6'b0};
-        out051 = {{8'b0,i051_r},6'b0};
-        out052 = {{8'b0,i052_r},6'b0};
-        out053 = {{8'b0,i053_r},6'b0};
-        out054 = {{8'b0,i054_r},6'b0};
-        out055 = {{8'b0,i055_r},6'b0};
-        out056 = {{8'b0,i056_r},6'b0};
-        out057 = {{8'b0,i057_r},6'b0};
-        out058 = {{8'b0,i058_r},6'b0};
-        out059 = {{8'b0,i059_r},6'b0};
-        out060 = {{8'b0,i060_r},6'b0};
-        out061 = {{8'b0,i061_r},6'b0};
-        out062 = {{8'b0,i062_r},6'b0};
-        out063 = {{8'b0,i063_r},6'b0};
-        out064 = {{8'b0,i064_r},6'b0};
-        out065 = {{8'b0,i065_r},6'b0};
-        out066 = {{8'b0,i066_r},6'b0};
-        out067 = {{8'b0,i067_r},6'b0};
-        out068 = {{8'b0,i068_r},6'b0};
-        out069 = {{8'b0,i069_r},6'b0};
-        out070 = {{8'b0,i070_r},6'b0};
-        out071 = {{8'b0,i071_r},6'b0};
-        out072 = {{8'b0,i072_r},6'b0};
-        out073 = {{8'b0,i073_r},6'b0};
-        out074 = {{8'b0,i074_r},6'b0};
-        out075 = {{8'b0,i075_r},6'b0};
-        out076 = {{8'b0,i076_r},6'b0};
-        out077 = {{8'b0,i077_r},6'b0};
-        out078 = {{8'b0,i078_r},6'b0};
-        out079 = {{8'b0,i079_r},6'b0};
-        out080 = {{8'b0,i080_r},6'b0};
-        out081 = {{8'b0,i081_r},6'b0};
-        out082 = {{8'b0,i082_r},6'b0};
-        out083 = {{8'b0,i083_r},6'b0};
-        out084 = {{8'b0,i084_r},6'b0};
-        out085 = {{8'b0,i085_r},6'b0};
-        out086 = {{8'b0,i086_r},6'b0};
-        out087 = {{8'b0,i087_r},6'b0};
-        out088 = {{8'b0,i088_r},6'b0};
-        out089 = {{8'b0,i089_r},6'b0};
-        out090 = {{8'b0,i090_r},6'b0};
-        out091 = {{8'b0,i091_r},6'b0};
-        out092 = {{8'b0,i092_r},6'b0};
-        out093 = {{8'b0,i093_r},6'b0};
-        out094 = {{8'b0,i094_r},6'b0};
-        out095 = {{8'b0,i095_r},6'b0};
-        out096 = {{8'b0,i096_r},6'b0};
-        out097 = {{8'b0,i097_r},6'b0};
-        out098 = {{8'b0,i098_r},6'b0};
-        out099 = {{8'b0,i099_r},6'b0};
-        out100 = {{8'b0,i100_r},6'b0};
-        out101 = {{8'b0,i101_r},6'b0};
-        out102 = {{8'b0,i102_r},6'b0};
-        out103 = {{8'b0,i103_r},6'b0};
-        out104 = {{8'b0,i104_r},6'b0};
-        out105 = {{8'b0,i105_r},6'b0};
-        out106 = {{8'b0,i106_r},6'b0};
-        out107 = {{8'b0,i107_r},6'b0};
-        out108 = {{8'b0,i108_r},6'b0};
-        out109 = {{8'b0,i109_r},6'b0};
-        out110 = {{8'b0,i110_r},6'b0};
-        out111 = {{8'b0,i111_r},6'b0};
-        out112 = {{8'b0,i112_r},6'b0};
-        out113 = {{8'b0,i113_r},6'b0};
-        out114 = {{8'b0,i114_r},6'b0};
-        out115 = {{8'b0,i115_r},6'b0};
-        out116 = {{8'b0,i116_r},6'b0};
-        out117 = {{8'b0,i117_r},6'b0};
-        out118 = {{8'b0,i118_r},6'b0};
-        out119 = {{8'b0,i119_r},6'b0};
-        out120 = {{8'b0,i120_r},6'b0};
+        out000 = {{8'b0,reg000},6'b0};
+        out001 = {{8'b0,reg001},6'b0};
+        out002 = {{8'b0,reg002},6'b0};
+        out003 = {{8'b0,reg003},6'b0};
+        out004 = {{8'b0,reg004},6'b0};
+        out005 = {{8'b0,reg005},6'b0};
+        out006 = {{8'b0,reg006},6'b0};
+        out007 = {{8'b0,reg007},6'b0};
+        out008 = {{8'b0,reg008},6'b0};
+        out009 = {{8'b0,reg009},6'b0};
+        out010 = {{8'b0,reg010},6'b0};
+        out011 = {{8'b0,reg011},6'b0};
+        out012 = {{8'b0,reg012},6'b0};
+        out013 = {{8'b0,reg013},6'b0};
+        out014 = {{8'b0,reg014},6'b0};
+        out015 = {{8'b0,reg015},6'b0};
+        out016 = {{8'b0,reg016},6'b0};
+        out017 = {{8'b0,reg017},6'b0};
+        out018 = {{8'b0,reg018},6'b0};
+        out019 = {{8'b0,reg019},6'b0};
+        out020 = {{8'b0,reg020},6'b0};
+        out021 = {{8'b0,reg021},6'b0};
+        out022 = {{8'b0,reg022},6'b0};
+        out023 = {{8'b0,reg023},6'b0};
+        out024 = {{8'b0,reg024},6'b0};
+        out025 = {{8'b0,reg025},6'b0};
+        out026 = {{8'b0,reg026},6'b0};
+        out027 = {{8'b0,reg027},6'b0};
+        out028 = {{8'b0,reg028},6'b0};
+        out029 = {{8'b0,reg029},6'b0};
+        out030 = {{8'b0,reg030},6'b0};
+        out031 = {{8'b0,reg031},6'b0};
+        out032 = {{8'b0,reg032},6'b0};
+        out033 = {{8'b0,reg033},6'b0};
+        out034 = {{8'b0,reg034},6'b0};
+        out035 = {{8'b0,reg035},6'b0};
+        out036 = {{8'b0,reg036},6'b0};
+        out037 = {{8'b0,reg037},6'b0};
+        out038 = {{8'b0,reg038},6'b0};
+        out039 = {{8'b0,reg039},6'b0};
+        out040 = {{8'b0,reg040},6'b0};
+        out041 = {{8'b0,reg041},6'b0};
+        out042 = {{8'b0,reg042},6'b0};
+        out043 = {{8'b0,reg043},6'b0};
+        out044 = {{8'b0,reg044},6'b0};
+        out045 = {{8'b0,reg045},6'b0};
+        out046 = {{8'b0,reg046},6'b0};
+        out047 = {{8'b0,reg047},6'b0};
+        out048 = {{8'b0,reg048},6'b0};
+        out049 = {{8'b0,reg049},6'b0};
+        out050 = {{8'b0,reg050},6'b0};
+        out051 = {{8'b0,reg051},6'b0};
+        out052 = {{8'b0,reg052},6'b0};
+        out053 = {{8'b0,reg053},6'b0};
+        out054 = {{8'b0,reg054},6'b0};
+        out055 = {{8'b0,reg055},6'b0};
+        out056 = {{8'b0,reg056},6'b0};
+        out057 = {{8'b0,reg057},6'b0};
+        out058 = {{8'b0,reg058},6'b0};
+        out059 = {{8'b0,reg059},6'b0};
+        out060 = {{8'b0,reg060},6'b0};
+        out061 = {{8'b0,reg061},6'b0};
+        out062 = {{8'b0,reg062},6'b0};
+        out063 = {{8'b0,reg063},6'b0};
+        out064 = {{8'b0,reg064},6'b0};
+        out065 = {{8'b0,reg065},6'b0};
+        out066 = {{8'b0,reg066},6'b0};
+        out067 = {{8'b0,reg067},6'b0};
+        out068 = {{8'b0,reg068},6'b0};
+        out069 = {{8'b0,reg069},6'b0};
+        out070 = {{8'b0,reg070},6'b0};
+        out071 = {{8'b0,reg071},6'b0};
+        out072 = {{8'b0,reg072},6'b0};
+        out073 = {{8'b0,reg073},6'b0};
+        out074 = {{8'b0,reg074},6'b0};
+        out075 = {{8'b0,reg075},6'b0};
+        out076 = {{8'b0,reg076},6'b0};
+        out077 = {{8'b0,reg077},6'b0};
+        out078 = {{8'b0,reg078},6'b0};
+        out079 = {{8'b0,reg079},6'b0};
+        out080 = {{8'b0,reg080},6'b0};
+        out081 = {{8'b0,reg081},6'b0};
+        out082 = {{8'b0,reg082},6'b0};
+        out083 = {{8'b0,reg083},6'b0};
+        out084 = {{8'b0,reg084},6'b0};
+        out085 = {{8'b0,reg085},6'b0};
+        out086 = {{8'b0,reg086},6'b0};
+        out087 = {{8'b0,reg087},6'b0};
+        out088 = {{8'b0,reg088},6'b0};
+        out089 = {{8'b0,reg089},6'b0};
+        out090 = {{8'b0,reg090},6'b0};
+        out091 = {{8'b0,reg091},6'b0};
+        out092 = {{8'b0,reg092},6'b0};
+        out093 = {{8'b0,reg093},6'b0};
+        out094 = {{8'b0,reg094},6'b0};
+        out095 = {{8'b0,reg095},6'b0};
+        out096 = {{8'b0,reg096},6'b0};
+        out097 = {{8'b0,reg097},6'b0};
+        out098 = {{8'b0,reg098},6'b0};
+        out099 = {{8'b0,reg099},6'b0};
+        out100 = {{8'b0,reg100},6'b0};
+        out101 = {{8'b0,reg101},6'b0};
+        out102 = {{8'b0,reg102},6'b0};
+        out103 = {{8'b0,reg103},6'b0};
+        out104 = {{8'b0,reg104},6'b0};
+        out105 = {{8'b0,reg105},6'b0};
+        out106 = {{8'b0,reg106},6'b0};
+        out107 = {{8'b0,reg107},6'b0};
+        out108 = {{8'b0,reg108},6'b0};
+        out109 = {{8'b0,reg109},6'b0};
+        out110 = {{8'b0,reg110},6'b0};
+        out111 = {{8'b0,reg111},6'b0};
+        out112 = {{8'b0,reg112},6'b0};
+        out113 = {{8'b0,reg113},6'b0};
+        out114 = {{8'b0,reg114},6'b0};
+        out115 = {{8'b0,reg115},6'b0};
+        out116 = {{8'b0,reg116},6'b0};
+        out117 = {{8'b0,reg117},6'b0};
+        out118 = {{8'b0,reg118},6'b0};
+        out119 = {{8'b0,reg119},6'b0};
+        out120 = {{8'b0,reg120},6'b0};
     end
 end
 

@@ -94,14 +94,14 @@ initial begin
         in_data = in_Real_save[in_addr];
         total_latency = total_latency + 1;
         
-        while(!finish && total_latency<900000) begin
+        while(!finish && total_latency<7000) begin
             @(negedge clk) total_latency = total_latency + 1;
             in_data = in_Real_save[in_addr];
             if(out_valid) begin
                 out_Real_save[out_addr] = out_data;
             end
             
-            if(total_latency%100000 ==0) $display(" total_latency = %d. ",total_latency);
+            if(total_latency%1000 ==0) $display(" total_latency = %d. ",total_latency);
         end
         
         @(negedge clk)  in_valid = 0; 
@@ -147,15 +147,15 @@ initial begin
         //Check with Golden Data
         for(i=0;i<65536;i=i+1) begin
             if( i>1279 && i<64256 && i%256 >4 && i%256<251 ) begin
-                if(out_Real_save[i] != in_Real_save[i]) begin
-                // if(out_Real_save[i] != ans_Real_save[i]) begin
+                if(out_Real_save[i] != ans_Real_save[i]) begin
+                // if(out_Real_save[i] != in_Real_save[i]) begin
                     error=error+1;
                     // $display("--------------------------------------------------------------");
                     // $display("                   #( ‵□′)───C＜─___-)|||                    ");
-                    $display("                      WRONG OUTPUT. #%5d                      ",i);
-                    $display(" Your output is %3d, but the answer is %3d", out_Real_save[i], in_Real_save[i]);
-                    // $display(" Your output is %d, but the answer is %d", out_Real_save[i], ans_Real_save[i]);
-                    $display("--------------------------------------------------------------");
+                    // $display("                      WRONG OUTPUT. #%5d                      ",i);
+                    // $display(" Your output is %3d, but the answer is %3d", out_Real_save[i], ans_Real_save[i]);
+                    // $display(" Your output is %3d, but the answer is %3d", out_Real_save[i], in_Real_save[i]);
+                    // $display("--------------------------------------------------------------");
                     //$finish;
                 end
             end
@@ -170,7 +170,7 @@ initial begin
     
     
     //IF NO ERROR
-    fptr = $fopen("img1_out_me.txt");
+    fptr = $fopen("img1_out.txt");
     
     // for(j=0; j<data_count; j=j+1)   begin
         // $display("==== Out_save ====== \n");
