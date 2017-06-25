@@ -6,11 +6,12 @@
 `include "mul_g.v"
 `include "mul_gi.v"
 `include "mul_ghi.v"
+
 `include "mul_h.v"
-`include "mul_hi.v"
+`include "mul_gh.v"
 
 `include "sum_ghi.v"
-`include "sum_hi.v"
+`include "sum_gh.v"
 
 // Bilateral Filter
 module blft(
@@ -88,19 +89,22 @@ reg         en_i_i0_map_r;
 reg         en_i_i0_map_w;
 reg         en_h_map_r;
 reg         en_h_map_w;
-reg         en_hi_map_r;
-reg         en_hi_map_w;
-reg         en_sum_hi_r;
-reg         en_sum_hi_w;
+reg         en_gh_map_r;
+reg         en_gh_map_w;
+reg         en_sum_gh_r;
+reg         en_sum_gh_w;
+
+reg         en_div_r;
+reg         en_div_w;
 
 reg  [7:0]  i_i0_map_r[0:120];
 reg  [7:0]  i_i0_map_w[0:120];
 reg  [6:0]  h_map_r[0:120];
 wire [6:0]  h_map_w[0:120];
-reg  [13:0] hi_map_r[0:120];
-wire [14:0] hi_map_w[0:120];
-reg  [20:0] sum_hi_r;
-wire [20:0] sum_hi_w;
+reg  [19:0] gh_map_r[0:120];
+wire [20:0] gh_map_w[0:120];
+reg  [26:0] sum_gh_r;
+wire [26:0] sum_gh_w;
  
 reg  [7:0]  in_buffer_r[0:10];
 reg  [7:0]  in_buffer_w[0:10];
@@ -128,6 +132,15 @@ always@(*) begin
     
     en_g_map_w      = en_g_map_r;
     en_gi_map_w     = en_gi_map_r;
+    en_ghi_map_w    = en_ghi_map_r;
+    en_sum_ghi_w    = en_sum_ghi_r;
+
+    en_i_i0_map_w   = en_i_i0_map_r;
+    en_h_map_w      = en_h_map_r;
+    en_gh_map_w     = en_gh_map_r;
+    en_sum_gh_w     = en_sum_gh_r;
+
+    en_div_w        = en_div_r;
 
     out_valid_w     = out_valid;
     out_addr_w      = { px_row_cntr_r , px_col_cntr_r };
@@ -158,10 +171,12 @@ always@(*) begin
         en_ghi_map_w    = 1;
         en_sum_ghi_w    = 1;
         
-        en_i_i0_map_w    = 1;
+        en_i_i0_map_w   = 1;
         en_h_map_w      = 1;
-        en_hi_map_w     = 1;
-        en_sum_hi_w     = 1;
+        en_gh_map_w     = 1;
+        en_sum_gh_w     = 1;
+
+        en_div_w        = 1;
     end
     
     LEFT: begin
@@ -221,7 +236,7 @@ always@(*) begin
             for(i=0;i<10;i=i+1)  mapi_w[i+110] = in_buffer_r[i];
             out_valid_w = 1;
             // out_data_w = mapi_r[60];
-            out_data_w = sum_ghi_r / sum_hi_r;
+            out_data_w = sum_ghi_r / sum_gh_r;
         end
         
         endcase
@@ -275,11 +290,13 @@ always @(posedge clk or posedge rst) begin
         
         en_i_i0_map_r   <= 0;
         en_h_map_r      <= 0;
-        en_hi_map_r     <= 0;
-        en_sum_hi_r     <= 0;
+        en_gh_map_r     <= 0;
+        en_sum_gh_r     <= 0;
+
+        en_div_r        <= 0;
 
         sum_ghi_r       <= 0;
-        sum_hi_r        <= 0;
+        sum_gh_r        <= 0;
         
         for(i=0;i<121;i=i+1) begin
             mapi_r[i]    <= 0;
@@ -289,7 +306,7 @@ always @(posedge clk or posedge rst) begin
 
             i_i0_map_r[i] <= 0;
             h_map_r[i]    <= 0;
-            hi_map_r[i]   <= 0;
+            gh_map_r[i]   <= 0;
         end
         for(i=0;i<11;i=i+1) begin
             in_buffer_r[i] <= 0;
@@ -316,11 +333,13 @@ always @(posedge clk or posedge rst) begin
         
         en_i_i0_map_r   <= en_i_i0_map_w;
         en_h_map_r      <= en_h_map_w;
-        en_hi_map_r     <= en_hi_map_w;
-        en_sum_hi_r     <= en_sum_hi_w;
+        en_gh_map_r     <= en_gh_map_w;
+        en_sum_gh_r     <= en_sum_gh_w;
+
+        en_div_r        <= en_div_w;
 
         sum_ghi_r       <= sum_ghi_w;
-        sum_hi_r        <= sum_hi_w;
+        sum_gh_r        <= sum_gh_w;
 
         for(i=0;i<121;i=i+1) begin
             mapi_r[i]    <= mapi_w[i];
@@ -330,13 +349,20 @@ always @(posedge clk or posedge rst) begin
 
             i_i0_map_r[i] <= i_i0_map_w[i];
             h_map_r[i]    <= h_map_w[i];
-            hi_map_r[i]   <= hi_map_w[i][13:0];
+            gh_map_r[i]   <= gh_map_w[i][19:0];
         end
         for(i=0;i<11;i=i+1) begin
             in_buffer_r[i] <= in_buffer_w[i];
         end
     end
 end
+
+
+// div_ghi_gh sum2out( .en(en_div_r)
+
+// );
+
+
 
 mul_g i2g(.en(en_g_map_r),
 .i000_n(mapi_r[0  ]),.i001_n(mapi_r[1  ]),.i002_n(mapi_r[2  ]),.i003_n(mapi_r[3  ]),.i004_n(mapi_r[4  ]),.i005_n(mapi_r[5  ]),.i006_n(mapi_r[6  ]),.i007_n(mapi_r[7  ]),.i008_n(mapi_r[8  ]),.i009_n(mapi_r[9  ]),
@@ -539,7 +565,19 @@ mul_h i_i02h(.en(en_h_map_r),.clk(clk),.rst(rst),
 .out110(h_map_w[110]),.out111(h_map_w[111]),.out112(h_map_w[112]),.out113(h_map_w[113]),.out114(h_map_w[114]),.out115(h_map_w[115]),.out116(h_map_w[116]),.out117(h_map_w[117]),.out118(h_map_w[118]),.out119(h_map_w[119]),.out120(h_map_w[120])
 );
 
-mul_hi h2hi(.en(en_hi_map_r),
+mul_gh h2gh(.en(en_gh_map_r),
+.i000_g(g_map_r[0  ]),.i001_g(g_map_r[1  ]),.i002_g(g_map_r[2  ]),.i003_g(g_map_r[3  ]),.i004_g(g_map_r[4  ]),.i005_g(g_map_r[5  ]),.i006_g(g_map_r[6  ]),.i007_g(g_map_r[7  ]),.i008_g(g_map_r[8  ]),.i009_g(g_map_r[9  ]),
+.i010_g(g_map_r[10 ]),.i011_g(g_map_r[11 ]),.i012_g(g_map_r[12 ]),.i013_g(g_map_r[13 ]),.i014_g(g_map_r[14 ]),.i015_g(g_map_r[15 ]),.i016_g(g_map_r[16 ]),.i017_g(g_map_r[17 ]),.i018_g(g_map_r[18 ]),.i019_g(g_map_r[19 ]),
+.i020_g(g_map_r[20 ]),.i021_g(g_map_r[21 ]),.i022_g(g_map_r[22 ]),.i023_g(g_map_r[23 ]),.i024_g(g_map_r[24 ]),.i025_g(g_map_r[25 ]),.i026_g(g_map_r[26 ]),.i027_g(g_map_r[27 ]),.i028_g(g_map_r[28 ]),.i029_g(g_map_r[29 ]),
+.i030_g(g_map_r[30 ]),.i031_g(g_map_r[31 ]),.i032_g(g_map_r[32 ]),.i033_g(g_map_r[33 ]),.i034_g(g_map_r[34 ]),.i035_g(g_map_r[35 ]),.i036_g(g_map_r[36 ]),.i037_g(g_map_r[37 ]),.i038_g(g_map_r[38 ]),.i039_g(g_map_r[39 ]),
+.i040_g(g_map_r[40 ]),.i041_g(g_map_r[41 ]),.i042_g(g_map_r[42 ]),.i043_g(g_map_r[43 ]),.i044_g(g_map_r[44 ]),.i045_g(g_map_r[45 ]),.i046_g(g_map_r[46 ]),.i047_g(g_map_r[47 ]),.i048_g(g_map_r[48 ]),.i049_g(g_map_r[49 ]),
+.i050_g(g_map_r[50 ]),.i051_g(g_map_r[51 ]),.i052_g(g_map_r[52 ]),.i053_g(g_map_r[53 ]),.i054_g(g_map_r[54 ]),.i055_g(g_map_r[55 ]),.i056_g(g_map_r[56 ]),.i057_g(g_map_r[57 ]),.i058_g(g_map_r[58 ]),.i059_g(g_map_r[59 ]),
+.i060_g(g_map_r[60 ]),.i061_g(g_map_r[61 ]),.i062_g(g_map_r[62 ]),.i063_g(g_map_r[63 ]),.i064_g(g_map_r[64 ]),.i065_g(g_map_r[65 ]),.i066_g(g_map_r[66 ]),.i067_g(g_map_r[67 ]),.i068_g(g_map_r[68 ]),.i069_g(g_map_r[69 ]),
+.i070_g(g_map_r[70 ]),.i071_g(g_map_r[71 ]),.i072_g(g_map_r[72 ]),.i073_g(g_map_r[73 ]),.i074_g(g_map_r[74 ]),.i075_g(g_map_r[75 ]),.i076_g(g_map_r[76 ]),.i077_g(g_map_r[77 ]),.i078_g(g_map_r[78 ]),.i079_g(g_map_r[79 ]),
+.i080_g(g_map_r[80 ]),.i081_g(g_map_r[81 ]),.i082_g(g_map_r[82 ]),.i083_g(g_map_r[83 ]),.i084_g(g_map_r[84 ]),.i085_g(g_map_r[85 ]),.i086_g(g_map_r[86 ]),.i087_g(g_map_r[87 ]),.i088_g(g_map_r[88 ]),.i089_g(g_map_r[89 ]),
+.i090_g(g_map_r[90 ]),.i091_g(g_map_r[91 ]),.i092_g(g_map_r[92 ]),.i093_g(g_map_r[93 ]),.i094_g(g_map_r[94 ]),.i095_g(g_map_r[95 ]),.i096_g(g_map_r[96 ]),.i097_g(g_map_r[97 ]),.i098_g(g_map_r[98 ]),.i099_g(g_map_r[99 ]),
+.i100_g(g_map_r[100]),.i101_g(g_map_r[101]),.i102_g(g_map_r[102]),.i103_g(g_map_r[103]),.i104_g(g_map_r[104]),.i105_g(g_map_r[105]),.i106_g(g_map_r[106]),.i107_g(g_map_r[107]),.i108_g(g_map_r[108]),.i109_g(g_map_r[109]),
+.i110_g(g_map_r[110]),.i111_g(g_map_r[111]),.i112_g(g_map_r[112]),.i113_g(g_map_r[113]),.i114_g(g_map_r[114]),.i115_g(g_map_r[115]),.i116_g(g_map_r[116]),.i117_g(g_map_r[117]),.i118_g(g_map_r[118]),.i119_g(g_map_r[119]),.i120_g(g_map_r[120]),
 .i000_h(h_map_r[0  ]),.i001_h(h_map_r[1  ]),.i002_h(h_map_r[2  ]),.i003_h(h_map_r[3  ]),.i004_h(h_map_r[4  ]),.i005_h(h_map_r[5  ]),.i006_h(h_map_r[6  ]),.i007_h(h_map_r[7  ]),.i008_h(h_map_r[8  ]),.i009_h(h_map_r[9  ]),
 .i010_h(h_map_r[10 ]),.i011_h(h_map_r[11 ]),.i012_h(h_map_r[12 ]),.i013_h(h_map_r[13 ]),.i014_h(h_map_r[14 ]),.i015_h(h_map_r[15 ]),.i016_h(h_map_r[16 ]),.i017_h(h_map_r[17 ]),.i018_h(h_map_r[18 ]),.i019_h(h_map_r[19 ]),
 .i020_h(h_map_r[20 ]),.i021_h(h_map_r[21 ]),.i022_h(h_map_r[22 ]),.i023_h(h_map_r[23 ]),.i024_h(h_map_r[24 ]),.i025_h(h_map_r[25 ]),.i026_h(h_map_r[26 ]),.i027_h(h_map_r[27 ]),.i028_h(h_map_r[28 ]),.i029_h(h_map_r[29 ]),
@@ -552,57 +590,45 @@ mul_hi h2hi(.en(en_hi_map_r),
 .i090_h(h_map_r[90 ]),.i091_h(h_map_r[91 ]),.i092_h(h_map_r[92 ]),.i093_h(h_map_r[93 ]),.i094_h(h_map_r[94 ]),.i095_h(h_map_r[95 ]),.i096_h(h_map_r[96 ]),.i097_h(h_map_r[97 ]),.i098_h(h_map_r[98 ]),.i099_h(h_map_r[99 ]),
 .i100_h(h_map_r[100]),.i101_h(h_map_r[101]),.i102_h(h_map_r[102]),.i103_h(h_map_r[103]),.i104_h(h_map_r[104]),.i105_h(h_map_r[105]),.i106_h(h_map_r[106]),.i107_h(h_map_r[107]),.i108_h(h_map_r[108]),.i109_h(h_map_r[109]),
 .i110_h(h_map_r[110]),.i111_h(h_map_r[111]),.i112_h(h_map_r[112]),.i113_h(h_map_r[113]),.i114_h(h_map_r[114]),.i115_h(h_map_r[115]),.i116_h(h_map_r[116]),.i117_h(h_map_r[117]),.i118_h(h_map_r[118]),.i119_h(h_map_r[119]),.i120_h(h_map_r[120]),
-.i000_i(mapi_r[0  ]),.i001_i(mapi_r[1  ]),.i002_i(mapi_r[2  ]),.i003_i(mapi_r[3  ]),.i004_i(mapi_r[4  ]),.i005_i(mapi_r[5  ]),.i006_i(mapi_r[6  ]),.i007_i(mapi_r[7  ]),.i008_i(mapi_r[8  ]),.i009_i(mapi_r[9  ]),
-.i010_i(mapi_r[10 ]),.i011_i(mapi_r[11 ]),.i012_i(mapi_r[12 ]),.i013_i(mapi_r[13 ]),.i014_i(mapi_r[14 ]),.i015_i(mapi_r[15 ]),.i016_i(mapi_r[16 ]),.i017_i(mapi_r[17 ]),.i018_i(mapi_r[18 ]),.i019_i(mapi_r[19 ]),
-.i020_i(mapi_r[20 ]),.i021_i(mapi_r[21 ]),.i022_i(mapi_r[22 ]),.i023_i(mapi_r[23 ]),.i024_i(mapi_r[24 ]),.i025_i(mapi_r[25 ]),.i026_i(mapi_r[26 ]),.i027_i(mapi_r[27 ]),.i028_i(mapi_r[28 ]),.i029_i(mapi_r[29 ]),
-.i030_i(mapi_r[30 ]),.i031_i(mapi_r[31 ]),.i032_i(mapi_r[32 ]),.i033_i(mapi_r[33 ]),.i034_i(mapi_r[34 ]),.i035_i(mapi_r[35 ]),.i036_i(mapi_r[36 ]),.i037_i(mapi_r[37 ]),.i038_i(mapi_r[38 ]),.i039_i(mapi_r[39 ]),
-.i040_i(mapi_r[40 ]),.i041_i(mapi_r[41 ]),.i042_i(mapi_r[42 ]),.i043_i(mapi_r[43 ]),.i044_i(mapi_r[44 ]),.i045_i(mapi_r[45 ]),.i046_i(mapi_r[46 ]),.i047_i(mapi_r[47 ]),.i048_i(mapi_r[48 ]),.i049_i(mapi_r[49 ]),
-.i050_i(mapi_r[50 ]),.i051_i(mapi_r[51 ]),.i052_i(mapi_r[52 ]),.i053_i(mapi_r[53 ]),.i054_i(mapi_r[54 ]),.i055_i(mapi_r[55 ]),.i056_i(mapi_r[56 ]),.i057_i(mapi_r[57 ]),.i058_i(mapi_r[58 ]),.i059_i(mapi_r[59 ]),
-.i060_i(mapi_r[60 ]),.i061_i(mapi_r[61 ]),.i062_i(mapi_r[62 ]),.i063_i(mapi_r[63 ]),.i064_i(mapi_r[64 ]),.i065_i(mapi_r[65 ]),.i066_i(mapi_r[66 ]),.i067_i(mapi_r[67 ]),.i068_i(mapi_r[68 ]),.i069_i(mapi_r[69 ]),
-.i070_i(mapi_r[70 ]),.i071_i(mapi_r[71 ]),.i072_i(mapi_r[72 ]),.i073_i(mapi_r[73 ]),.i074_i(mapi_r[74 ]),.i075_i(mapi_r[75 ]),.i076_i(mapi_r[76 ]),.i077_i(mapi_r[77 ]),.i078_i(mapi_r[78 ]),.i079_i(mapi_r[79 ]),
-.i080_i(mapi_r[80 ]),.i081_i(mapi_r[81 ]),.i082_i(mapi_r[82 ]),.i083_i(mapi_r[83 ]),.i084_i(mapi_r[84 ]),.i085_i(mapi_r[85 ]),.i086_i(mapi_r[86 ]),.i087_i(mapi_r[87 ]),.i088_i(mapi_r[88 ]),.i089_i(mapi_r[89 ]),
-.i090_i(mapi_r[90 ]),.i091_i(mapi_r[91 ]),.i092_i(mapi_r[92 ]),.i093_i(mapi_r[93 ]),.i094_i(mapi_r[94 ]),.i095_i(mapi_r[95 ]),.i096_i(mapi_r[96 ]),.i097_i(mapi_r[97 ]),.i098_i(mapi_r[98 ]),.i099_i(mapi_r[99 ]),
-.i100_i(mapi_r[100]),.i101_i(mapi_r[101]),.i102_i(mapi_r[102]),.i103_i(mapi_r[103]),.i104_i(mapi_r[104]),.i105_i(mapi_r[105]),.i106_i(mapi_r[106]),.i107_i(mapi_r[107]),.i108_i(mapi_r[108]),.i109_i(mapi_r[109]),
-.i110_i(mapi_r[110]),.i111_i(mapi_r[111]),.i112_i(mapi_r[112]),.i113_i(mapi_r[113]),.i114_i(mapi_r[114]),.i115_i(mapi_r[115]),.i116_i(mapi_r[116]),.i117_i(mapi_r[117]),.i118_i(mapi_r[118]),.i119_i(mapi_r[119]),.i120_i(mapi_r[120]),
-.reg000(hi_map_r[0  ]),.reg001(hi_map_r[1  ]),.reg002(hi_map_r[2  ]),.reg003(hi_map_r[3  ]),.reg004(hi_map_r[4  ]),.reg005(hi_map_r[5  ]),.reg006(hi_map_r[6  ]),.reg007(hi_map_r[7  ]),.reg008(hi_map_r[8  ]),.reg009(hi_map_r[9  ]),
-.reg010(hi_map_r[10 ]),.reg011(hi_map_r[11 ]),.reg012(hi_map_r[12 ]),.reg013(hi_map_r[13 ]),.reg014(hi_map_r[14 ]),.reg015(hi_map_r[15 ]),.reg016(hi_map_r[16 ]),.reg017(hi_map_r[17 ]),.reg018(hi_map_r[18 ]),.reg019(hi_map_r[19 ]),
-.reg020(hi_map_r[20 ]),.reg021(hi_map_r[21 ]),.reg022(hi_map_r[22 ]),.reg023(hi_map_r[23 ]),.reg024(hi_map_r[24 ]),.reg025(hi_map_r[25 ]),.reg026(hi_map_r[26 ]),.reg027(hi_map_r[27 ]),.reg028(hi_map_r[28 ]),.reg029(hi_map_r[29 ]),
-.reg030(hi_map_r[30 ]),.reg031(hi_map_r[31 ]),.reg032(hi_map_r[32 ]),.reg033(hi_map_r[33 ]),.reg034(hi_map_r[34 ]),.reg035(hi_map_r[35 ]),.reg036(hi_map_r[36 ]),.reg037(hi_map_r[37 ]),.reg038(hi_map_r[38 ]),.reg039(hi_map_r[39 ]),
-.reg040(hi_map_r[40 ]),.reg041(hi_map_r[41 ]),.reg042(hi_map_r[42 ]),.reg043(hi_map_r[43 ]),.reg044(hi_map_r[44 ]),.reg045(hi_map_r[45 ]),.reg046(hi_map_r[46 ]),.reg047(hi_map_r[47 ]),.reg048(hi_map_r[48 ]),.reg049(hi_map_r[49 ]),
-.reg050(hi_map_r[50 ]),.reg051(hi_map_r[51 ]),.reg052(hi_map_r[52 ]),.reg053(hi_map_r[53 ]),.reg054(hi_map_r[54 ]),.reg055(hi_map_r[55 ]),.reg056(hi_map_r[56 ]),.reg057(hi_map_r[57 ]),.reg058(hi_map_r[58 ]),.reg059(hi_map_r[59 ]),
-.reg060(hi_map_r[60 ]),.reg061(hi_map_r[61 ]),.reg062(hi_map_r[62 ]),.reg063(hi_map_r[63 ]),.reg064(hi_map_r[64 ]),.reg065(hi_map_r[65 ]),.reg066(hi_map_r[66 ]),.reg067(hi_map_r[67 ]),.reg068(hi_map_r[68 ]),.reg069(hi_map_r[69 ]),
-.reg070(hi_map_r[70 ]),.reg071(hi_map_r[71 ]),.reg072(hi_map_r[72 ]),.reg073(hi_map_r[73 ]),.reg074(hi_map_r[74 ]),.reg075(hi_map_r[75 ]),.reg076(hi_map_r[76 ]),.reg077(hi_map_r[77 ]),.reg078(hi_map_r[78 ]),.reg079(hi_map_r[79 ]),
-.reg080(hi_map_r[80 ]),.reg081(hi_map_r[81 ]),.reg082(hi_map_r[82 ]),.reg083(hi_map_r[83 ]),.reg084(hi_map_r[84 ]),.reg085(hi_map_r[85 ]),.reg086(hi_map_r[86 ]),.reg087(hi_map_r[87 ]),.reg088(hi_map_r[88 ]),.reg089(hi_map_r[89 ]),
-.reg090(hi_map_r[90 ]),.reg091(hi_map_r[91 ]),.reg092(hi_map_r[92 ]),.reg093(hi_map_r[93 ]),.reg094(hi_map_r[94 ]),.reg095(hi_map_r[95 ]),.reg096(hi_map_r[96 ]),.reg097(hi_map_r[97 ]),.reg098(hi_map_r[98 ]),.reg099(hi_map_r[99 ]),
-.reg100(hi_map_r[100]),.reg101(hi_map_r[101]),.reg102(hi_map_r[102]),.reg103(hi_map_r[103]),.reg104(hi_map_r[104]),.reg105(hi_map_r[105]),.reg106(hi_map_r[106]),.reg107(hi_map_r[107]),.reg108(hi_map_r[108]),.reg109(hi_map_r[109]),
-.reg110(hi_map_r[110]),.reg111(hi_map_r[111]),.reg112(hi_map_r[112]),.reg113(hi_map_r[113]),.reg114(hi_map_r[114]),.reg115(hi_map_r[115]),.reg116(hi_map_r[116]),.reg117(hi_map_r[117]),.reg118(hi_map_r[118]),.reg119(hi_map_r[119]),.reg120(hi_map_r[120]),
-.out000(hi_map_w[0  ]),.out001(hi_map_w[1  ]),.out002(hi_map_w[2  ]),.out003(hi_map_w[3  ]),.out004(hi_map_w[4  ]),.out005(hi_map_w[5  ]),.out006(hi_map_w[6  ]),.out007(hi_map_w[7  ]),.out008(hi_map_w[8  ]),.out009(hi_map_w[9  ]),
-.out010(hi_map_w[10 ]),.out011(hi_map_w[11 ]),.out012(hi_map_w[12 ]),.out013(hi_map_w[13 ]),.out014(hi_map_w[14 ]),.out015(hi_map_w[15 ]),.out016(hi_map_w[16 ]),.out017(hi_map_w[17 ]),.out018(hi_map_w[18 ]),.out019(hi_map_w[19 ]),
-.out020(hi_map_w[20 ]),.out021(hi_map_w[21 ]),.out022(hi_map_w[22 ]),.out023(hi_map_w[23 ]),.out024(hi_map_w[24 ]),.out025(hi_map_w[25 ]),.out026(hi_map_w[26 ]),.out027(hi_map_w[27 ]),.out028(hi_map_w[28 ]),.out029(hi_map_w[29 ]),
-.out030(hi_map_w[30 ]),.out031(hi_map_w[31 ]),.out032(hi_map_w[32 ]),.out033(hi_map_w[33 ]),.out034(hi_map_w[34 ]),.out035(hi_map_w[35 ]),.out036(hi_map_w[36 ]),.out037(hi_map_w[37 ]),.out038(hi_map_w[38 ]),.out039(hi_map_w[39 ]),
-.out040(hi_map_w[40 ]),.out041(hi_map_w[41 ]),.out042(hi_map_w[42 ]),.out043(hi_map_w[43 ]),.out044(hi_map_w[44 ]),.out045(hi_map_w[45 ]),.out046(hi_map_w[46 ]),.out047(hi_map_w[47 ]),.out048(hi_map_w[48 ]),.out049(hi_map_w[49 ]),
-.out050(hi_map_w[50 ]),.out051(hi_map_w[51 ]),.out052(hi_map_w[52 ]),.out053(hi_map_w[53 ]),.out054(hi_map_w[54 ]),.out055(hi_map_w[55 ]),.out056(hi_map_w[56 ]),.out057(hi_map_w[57 ]),.out058(hi_map_w[58 ]),.out059(hi_map_w[59 ]),
-.out060(hi_map_w[60 ]),.out061(hi_map_w[61 ]),.out062(hi_map_w[62 ]),.out063(hi_map_w[63 ]),.out064(hi_map_w[64 ]),.out065(hi_map_w[65 ]),.out066(hi_map_w[66 ]),.out067(hi_map_w[67 ]),.out068(hi_map_w[68 ]),.out069(hi_map_w[69 ]),
-.out070(hi_map_w[70 ]),.out071(hi_map_w[71 ]),.out072(hi_map_w[72 ]),.out073(hi_map_w[73 ]),.out074(hi_map_w[74 ]),.out075(hi_map_w[75 ]),.out076(hi_map_w[76 ]),.out077(hi_map_w[77 ]),.out078(hi_map_w[78 ]),.out079(hi_map_w[79 ]),
-.out080(hi_map_w[80 ]),.out081(hi_map_w[81 ]),.out082(hi_map_w[82 ]),.out083(hi_map_w[83 ]),.out084(hi_map_w[84 ]),.out085(hi_map_w[85 ]),.out086(hi_map_w[86 ]),.out087(hi_map_w[87 ]),.out088(hi_map_w[88 ]),.out089(hi_map_w[89 ]),
-.out090(hi_map_w[90 ]),.out091(hi_map_w[91 ]),.out092(hi_map_w[92 ]),.out093(hi_map_w[93 ]),.out094(hi_map_w[94 ]),.out095(hi_map_w[95 ]),.out096(hi_map_w[96 ]),.out097(hi_map_w[97 ]),.out098(hi_map_w[98 ]),.out099(hi_map_w[99 ]),
-.out100(hi_map_w[100]),.out101(hi_map_w[101]),.out102(hi_map_w[102]),.out103(hi_map_w[103]),.out104(hi_map_w[104]),.out105(hi_map_w[105]),.out106(hi_map_w[106]),.out107(hi_map_w[107]),.out108(hi_map_w[108]),.out109(hi_map_w[109]),
-.out110(hi_map_w[110]),.out111(hi_map_w[111]),.out112(hi_map_w[112]),.out113(hi_map_w[113]),.out114(hi_map_w[114]),.out115(hi_map_w[115]),.out116(hi_map_w[116]),.out117(hi_map_w[117]),.out118(hi_map_w[118]),.out119(hi_map_w[119]),.out120(hi_map_w[120])
+.reg000(gh_map_r[0  ]),.reg001(gh_map_r[1  ]),.reg002(gh_map_r[2  ]),.reg003(gh_map_r[3  ]),.reg004(gh_map_r[4  ]),.reg005(gh_map_r[5  ]),.reg006(gh_map_r[6  ]),.reg007(gh_map_r[7  ]),.reg008(gh_map_r[8  ]),.reg009(gh_map_r[9  ]),
+.reg010(gh_map_r[10 ]),.reg011(gh_map_r[11 ]),.reg012(gh_map_r[12 ]),.reg013(gh_map_r[13 ]),.reg014(gh_map_r[14 ]),.reg015(gh_map_r[15 ]),.reg016(gh_map_r[16 ]),.reg017(gh_map_r[17 ]),.reg018(gh_map_r[18 ]),.reg019(gh_map_r[19 ]),
+.reg020(gh_map_r[20 ]),.reg021(gh_map_r[21 ]),.reg022(gh_map_r[22 ]),.reg023(gh_map_r[23 ]),.reg024(gh_map_r[24 ]),.reg025(gh_map_r[25 ]),.reg026(gh_map_r[26 ]),.reg027(gh_map_r[27 ]),.reg028(gh_map_r[28 ]),.reg029(gh_map_r[29 ]),
+.reg030(gh_map_r[30 ]),.reg031(gh_map_r[31 ]),.reg032(gh_map_r[32 ]),.reg033(gh_map_r[33 ]),.reg034(gh_map_r[34 ]),.reg035(gh_map_r[35 ]),.reg036(gh_map_r[36 ]),.reg037(gh_map_r[37 ]),.reg038(gh_map_r[38 ]),.reg039(gh_map_r[39 ]),
+.reg040(gh_map_r[40 ]),.reg041(gh_map_r[41 ]),.reg042(gh_map_r[42 ]),.reg043(gh_map_r[43 ]),.reg044(gh_map_r[44 ]),.reg045(gh_map_r[45 ]),.reg046(gh_map_r[46 ]),.reg047(gh_map_r[47 ]),.reg048(gh_map_r[48 ]),.reg049(gh_map_r[49 ]),
+.reg050(gh_map_r[50 ]),.reg051(gh_map_r[51 ]),.reg052(gh_map_r[52 ]),.reg053(gh_map_r[53 ]),.reg054(gh_map_r[54 ]),.reg055(gh_map_r[55 ]),.reg056(gh_map_r[56 ]),.reg057(gh_map_r[57 ]),.reg058(gh_map_r[58 ]),.reg059(gh_map_r[59 ]),
+.reg060(gh_map_r[60 ]),.reg061(gh_map_r[61 ]),.reg062(gh_map_r[62 ]),.reg063(gh_map_r[63 ]),.reg064(gh_map_r[64 ]),.reg065(gh_map_r[65 ]),.reg066(gh_map_r[66 ]),.reg067(gh_map_r[67 ]),.reg068(gh_map_r[68 ]),.reg069(gh_map_r[69 ]),
+.reg070(gh_map_r[70 ]),.reg071(gh_map_r[71 ]),.reg072(gh_map_r[72 ]),.reg073(gh_map_r[73 ]),.reg074(gh_map_r[74 ]),.reg075(gh_map_r[75 ]),.reg076(gh_map_r[76 ]),.reg077(gh_map_r[77 ]),.reg078(gh_map_r[78 ]),.reg079(gh_map_r[79 ]),
+.reg080(gh_map_r[80 ]),.reg081(gh_map_r[81 ]),.reg082(gh_map_r[82 ]),.reg083(gh_map_r[83 ]),.reg084(gh_map_r[84 ]),.reg085(gh_map_r[85 ]),.reg086(gh_map_r[86 ]),.reg087(gh_map_r[87 ]),.reg088(gh_map_r[88 ]),.reg089(gh_map_r[89 ]),
+.reg090(gh_map_r[90 ]),.reg091(gh_map_r[91 ]),.reg092(gh_map_r[92 ]),.reg093(gh_map_r[93 ]),.reg094(gh_map_r[94 ]),.reg095(gh_map_r[95 ]),.reg096(gh_map_r[96 ]),.reg097(gh_map_r[97 ]),.reg098(gh_map_r[98 ]),.reg099(gh_map_r[99 ]),
+.reg100(gh_map_r[100]),.reg101(gh_map_r[101]),.reg102(gh_map_r[102]),.reg103(gh_map_r[103]),.reg104(gh_map_r[104]),.reg105(gh_map_r[105]),.reg106(gh_map_r[106]),.reg107(gh_map_r[107]),.reg108(gh_map_r[108]),.reg109(gh_map_r[109]),
+.reg110(gh_map_r[110]),.reg111(gh_map_r[111]),.reg112(gh_map_r[112]),.reg113(gh_map_r[113]),.reg114(gh_map_r[114]),.reg115(gh_map_r[115]),.reg116(gh_map_r[116]),.reg117(gh_map_r[117]),.reg118(gh_map_r[118]),.reg119(gh_map_r[119]),.reg120(gh_map_r[120]),
+.out000(gh_map_w[0  ]),.out001(gh_map_w[1  ]),.out002(gh_map_w[2  ]),.out003(gh_map_w[3  ]),.out004(gh_map_w[4  ]),.out005(gh_map_w[5  ]),.out006(gh_map_w[6  ]),.out007(gh_map_w[7  ]),.out008(gh_map_w[8  ]),.out009(gh_map_w[9  ]),
+.out010(gh_map_w[10 ]),.out011(gh_map_w[11 ]),.out012(gh_map_w[12 ]),.out013(gh_map_w[13 ]),.out014(gh_map_w[14 ]),.out015(gh_map_w[15 ]),.out016(gh_map_w[16 ]),.out017(gh_map_w[17 ]),.out018(gh_map_w[18 ]),.out019(gh_map_w[19 ]),
+.out020(gh_map_w[20 ]),.out021(gh_map_w[21 ]),.out022(gh_map_w[22 ]),.out023(gh_map_w[23 ]),.out024(gh_map_w[24 ]),.out025(gh_map_w[25 ]),.out026(gh_map_w[26 ]),.out027(gh_map_w[27 ]),.out028(gh_map_w[28 ]),.out029(gh_map_w[29 ]),
+.out030(gh_map_w[30 ]),.out031(gh_map_w[31 ]),.out032(gh_map_w[32 ]),.out033(gh_map_w[33 ]),.out034(gh_map_w[34 ]),.out035(gh_map_w[35 ]),.out036(gh_map_w[36 ]),.out037(gh_map_w[37 ]),.out038(gh_map_w[38 ]),.out039(gh_map_w[39 ]),
+.out040(gh_map_w[40 ]),.out041(gh_map_w[41 ]),.out042(gh_map_w[42 ]),.out043(gh_map_w[43 ]),.out044(gh_map_w[44 ]),.out045(gh_map_w[45 ]),.out046(gh_map_w[46 ]),.out047(gh_map_w[47 ]),.out048(gh_map_w[48 ]),.out049(gh_map_w[49 ]),
+.out050(gh_map_w[50 ]),.out051(gh_map_w[51 ]),.out052(gh_map_w[52 ]),.out053(gh_map_w[53 ]),.out054(gh_map_w[54 ]),.out055(gh_map_w[55 ]),.out056(gh_map_w[56 ]),.out057(gh_map_w[57 ]),.out058(gh_map_w[58 ]),.out059(gh_map_w[59 ]),
+.out060(gh_map_w[60 ]),.out061(gh_map_w[61 ]),.out062(gh_map_w[62 ]),.out063(gh_map_w[63 ]),.out064(gh_map_w[64 ]),.out065(gh_map_w[65 ]),.out066(gh_map_w[66 ]),.out067(gh_map_w[67 ]),.out068(gh_map_w[68 ]),.out069(gh_map_w[69 ]),
+.out070(gh_map_w[70 ]),.out071(gh_map_w[71 ]),.out072(gh_map_w[72 ]),.out073(gh_map_w[73 ]),.out074(gh_map_w[74 ]),.out075(gh_map_w[75 ]),.out076(gh_map_w[76 ]),.out077(gh_map_w[77 ]),.out078(gh_map_w[78 ]),.out079(gh_map_w[79 ]),
+.out080(gh_map_w[80 ]),.out081(gh_map_w[81 ]),.out082(gh_map_w[82 ]),.out083(gh_map_w[83 ]),.out084(gh_map_w[84 ]),.out085(gh_map_w[85 ]),.out086(gh_map_w[86 ]),.out087(gh_map_w[87 ]),.out088(gh_map_w[88 ]),.out089(gh_map_w[89 ]),
+.out090(gh_map_w[90 ]),.out091(gh_map_w[91 ]),.out092(gh_map_w[92 ]),.out093(gh_map_w[93 ]),.out094(gh_map_w[94 ]),.out095(gh_map_w[95 ]),.out096(gh_map_w[96 ]),.out097(gh_map_w[97 ]),.out098(gh_map_w[98 ]),.out099(gh_map_w[99 ]),
+.out100(gh_map_w[100]),.out101(gh_map_w[101]),.out102(gh_map_w[102]),.out103(gh_map_w[103]),.out104(gh_map_w[104]),.out105(gh_map_w[105]),.out106(gh_map_w[106]),.out107(gh_map_w[107]),.out108(gh_map_w[108]),.out109(gh_map_w[109]),
+.out110(gh_map_w[110]),.out111(gh_map_w[111]),.out112(gh_map_w[112]),.out113(gh_map_w[113]),.out114(gh_map_w[114]),.out115(gh_map_w[115]),.out116(gh_map_w[116]),.out117(gh_map_w[117]),.out118(gh_map_w[118]),.out119(gh_map_w[119]),.out120(gh_map_w[120])
 );
 
-sum_hi hi2sum(.en(en_sum_hi_r),.reg_sum(sum_hi_r),.out_sum(sum_hi_w),
-.hi000(hi_map_r[0  ]),.hi001(hi_map_r[1  ]),.hi002(hi_map_r[2  ]),.hi003(hi_map_r[3  ]),.hi004(hi_map_r[4  ]),.hi005(hi_map_r[5  ]),.hi006(hi_map_r[6  ]),.hi007(hi_map_r[7  ]),.hi008(hi_map_r[8  ]),.hi009(hi_map_r[9  ]),
-.hi010(hi_map_r[10 ]),.hi011(hi_map_r[11 ]),.hi012(hi_map_r[12 ]),.hi013(hi_map_r[13 ]),.hi014(hi_map_r[14 ]),.hi015(hi_map_r[15 ]),.hi016(hi_map_r[16 ]),.hi017(hi_map_r[17 ]),.hi018(hi_map_r[18 ]),.hi019(hi_map_r[19 ]),
-.hi020(hi_map_r[20 ]),.hi021(hi_map_r[21 ]),.hi022(hi_map_r[22 ]),.hi023(hi_map_r[23 ]),.hi024(hi_map_r[24 ]),.hi025(hi_map_r[25 ]),.hi026(hi_map_r[26 ]),.hi027(hi_map_r[27 ]),.hi028(hi_map_r[28 ]),.hi029(hi_map_r[29 ]),
-.hi030(hi_map_r[30 ]),.hi031(hi_map_r[31 ]),.hi032(hi_map_r[32 ]),.hi033(hi_map_r[33 ]),.hi034(hi_map_r[34 ]),.hi035(hi_map_r[35 ]),.hi036(hi_map_r[36 ]),.hi037(hi_map_r[37 ]),.hi038(hi_map_r[38 ]),.hi039(hi_map_r[39 ]),
-.hi040(hi_map_r[40 ]),.hi041(hi_map_r[41 ]),.hi042(hi_map_r[42 ]),.hi043(hi_map_r[43 ]),.hi044(hi_map_r[44 ]),.hi045(hi_map_r[45 ]),.hi046(hi_map_r[46 ]),.hi047(hi_map_r[47 ]),.hi048(hi_map_r[48 ]),.hi049(hi_map_r[49 ]),
-.hi050(hi_map_r[50 ]),.hi051(hi_map_r[51 ]),.hi052(hi_map_r[52 ]),.hi053(hi_map_r[53 ]),.hi054(hi_map_r[54 ]),.hi055(hi_map_r[55 ]),.hi056(hi_map_r[56 ]),.hi057(hi_map_r[57 ]),.hi058(hi_map_r[58 ]),.hi059(hi_map_r[59 ]),
-.hi060(hi_map_r[60 ]),.hi061(hi_map_r[61 ]),.hi062(hi_map_r[62 ]),.hi063(hi_map_r[63 ]),.hi064(hi_map_r[64 ]),.hi065(hi_map_r[65 ]),.hi066(hi_map_r[66 ]),.hi067(hi_map_r[67 ]),.hi068(hi_map_r[68 ]),.hi069(hi_map_r[69 ]),
-.hi070(hi_map_r[70 ]),.hi071(hi_map_r[71 ]),.hi072(hi_map_r[72 ]),.hi073(hi_map_r[73 ]),.hi074(hi_map_r[74 ]),.hi075(hi_map_r[75 ]),.hi076(hi_map_r[76 ]),.hi077(hi_map_r[77 ]),.hi078(hi_map_r[78 ]),.hi079(hi_map_r[79 ]),
-.hi080(hi_map_r[80 ]),.hi081(hi_map_r[81 ]),.hi082(hi_map_r[82 ]),.hi083(hi_map_r[83 ]),.hi084(hi_map_r[84 ]),.hi085(hi_map_r[85 ]),.hi086(hi_map_r[86 ]),.hi087(hi_map_r[87 ]),.hi088(hi_map_r[88 ]),.hi089(hi_map_r[89 ]),
-.hi090(hi_map_r[90 ]),.hi091(hi_map_r[91 ]),.hi092(hi_map_r[92 ]),.hi093(hi_map_r[93 ]),.hi094(hi_map_r[94 ]),.hi095(hi_map_r[95 ]),.hi096(hi_map_r[96 ]),.hi097(hi_map_r[97 ]),.hi098(hi_map_r[98 ]),.hi099(hi_map_r[99 ]),
-.hi100(hi_map_r[100]),.hi101(hi_map_r[101]),.hi102(hi_map_r[102]),.hi103(hi_map_r[103]),.hi104(hi_map_r[104]),.hi105(hi_map_r[105]),.hi106(hi_map_r[106]),.hi107(hi_map_r[107]),.hi108(hi_map_r[108]),.hi109(hi_map_r[109]),
-.hi110(hi_map_r[110]),.hi111(hi_map_r[111]),.hi112(hi_map_r[112]),.hi113(hi_map_r[113]),.hi114(hi_map_r[114]),.hi115(hi_map_r[115]),.hi116(hi_map_r[116]),.hi117(hi_map_r[117]),.hi118(hi_map_r[118]),.hi119(hi_map_r[119]),.hi120(hi_map_r[120])
+sum_gh gh2sum(.en(en_sum_gh_r),.reg_sum(sum_gh_r),.out_sum(sum_gh_w),
+.gh000(gh_map_r[0  ]),.gh001(gh_map_r[1  ]),.gh002(gh_map_r[2  ]),.gh003(gh_map_r[3  ]),.gh004(gh_map_r[4  ]),.gh005(gh_map_r[5  ]),.gh006(gh_map_r[6  ]),.gh007(gh_map_r[7  ]),.gh008(gh_map_r[8  ]),.gh009(gh_map_r[9  ]),
+.gh010(gh_map_r[10 ]),.gh011(gh_map_r[11 ]),.gh012(gh_map_r[12 ]),.gh013(gh_map_r[13 ]),.gh014(gh_map_r[14 ]),.gh015(gh_map_r[15 ]),.gh016(gh_map_r[16 ]),.gh017(gh_map_r[17 ]),.gh018(gh_map_r[18 ]),.gh019(gh_map_r[19 ]),
+.gh020(gh_map_r[20 ]),.gh021(gh_map_r[21 ]),.gh022(gh_map_r[22 ]),.gh023(gh_map_r[23 ]),.gh024(gh_map_r[24 ]),.gh025(gh_map_r[25 ]),.gh026(gh_map_r[26 ]),.gh027(gh_map_r[27 ]),.gh028(gh_map_r[28 ]),.gh029(gh_map_r[29 ]),
+.gh030(gh_map_r[30 ]),.gh031(gh_map_r[31 ]),.gh032(gh_map_r[32 ]),.gh033(gh_map_r[33 ]),.gh034(gh_map_r[34 ]),.gh035(gh_map_r[35 ]),.gh036(gh_map_r[36 ]),.gh037(gh_map_r[37 ]),.gh038(gh_map_r[38 ]),.gh039(gh_map_r[39 ]),
+.gh040(gh_map_r[40 ]),.gh041(gh_map_r[41 ]),.gh042(gh_map_r[42 ]),.gh043(gh_map_r[43 ]),.gh044(gh_map_r[44 ]),.gh045(gh_map_r[45 ]),.gh046(gh_map_r[46 ]),.gh047(gh_map_r[47 ]),.gh048(gh_map_r[48 ]),.gh049(gh_map_r[49 ]),
+.gh050(gh_map_r[50 ]),.gh051(gh_map_r[51 ]),.gh052(gh_map_r[52 ]),.gh053(gh_map_r[53 ]),.gh054(gh_map_r[54 ]),.gh055(gh_map_r[55 ]),.gh056(gh_map_r[56 ]),.gh057(gh_map_r[57 ]),.gh058(gh_map_r[58 ]),.gh059(gh_map_r[59 ]),
+.gh060(gh_map_r[60 ]),.gh061(gh_map_r[61 ]),.gh062(gh_map_r[62 ]),.gh063(gh_map_r[63 ]),.gh064(gh_map_r[64 ]),.gh065(gh_map_r[65 ]),.gh066(gh_map_r[66 ]),.gh067(gh_map_r[67 ]),.gh068(gh_map_r[68 ]),.gh069(gh_map_r[69 ]),
+.gh070(gh_map_r[70 ]),.gh071(gh_map_r[71 ]),.gh072(gh_map_r[72 ]),.gh073(gh_map_r[73 ]),.gh074(gh_map_r[74 ]),.gh075(gh_map_r[75 ]),.gh076(gh_map_r[76 ]),.gh077(gh_map_r[77 ]),.gh078(gh_map_r[78 ]),.gh079(gh_map_r[79 ]),
+.gh080(gh_map_r[80 ]),.gh081(gh_map_r[81 ]),.gh082(gh_map_r[82 ]),.gh083(gh_map_r[83 ]),.gh084(gh_map_r[84 ]),.gh085(gh_map_r[85 ]),.gh086(gh_map_r[86 ]),.gh087(gh_map_r[87 ]),.gh088(gh_map_r[88 ]),.gh089(gh_map_r[89 ]),
+.gh090(gh_map_r[90 ]),.gh091(gh_map_r[91 ]),.gh092(gh_map_r[92 ]),.gh093(gh_map_r[93 ]),.gh094(gh_map_r[94 ]),.gh095(gh_map_r[95 ]),.gh096(gh_map_r[96 ]),.gh097(gh_map_r[97 ]),.gh098(gh_map_r[98 ]),.gh099(gh_map_r[99 ]),
+.gh100(gh_map_r[100]),.gh101(gh_map_r[101]),.gh102(gh_map_r[102]),.gh103(gh_map_r[103]),.gh104(gh_map_r[104]),.gh105(gh_map_r[105]),.gh106(gh_map_r[106]),.gh107(gh_map_r[107]),.gh108(gh_map_r[108]),.gh109(gh_map_r[109]),
+.gh110(gh_map_r[110]),.gh111(gh_map_r[111]),.gh112(gh_map_r[112]),.gh113(gh_map_r[113]),.gh114(gh_map_r[114]),.gh115(gh_map_r[115]),.gh116(gh_map_r[116]),.gh117(gh_map_r[117]),.gh118(gh_map_r[118]),.gh119(gh_map_r[119]),.gh120(gh_map_r[120])
 );
 
 

@@ -26,7 +26,7 @@ input             finish;
 
 //////////////////////////////////////////////
 integer i, j, latency, total_latency;
-integer fptr,frtr1,frtr2,cnt,error;
+integer fptr,frtr1,frtr2,cnt,error,loss_error;
 parameter data_count = 1; // num of dataset
 
 reg [7:0] in_Real_save [0:65535];
@@ -46,6 +46,7 @@ initial begin
     total_latency = 0;
     latency = 0;
     error =0;
+    loss_error =0;
     
     //LOAD  input data
     $display("\n\n ==== Input saved ===============");
@@ -150,13 +151,18 @@ initial begin
                 if(out_Real_save[i] != ans_Real_save[i]) begin
                 // if(out_Real_save[i] != in_Real_save[i]) begin
                     error=error+1;
+                    if((out_Real_save[i]-ans_Real_save[i]>2 && out_Real_save[i]>ans_Real_save[i])|| (ans_Real_save[i]-out_Real_save[i]>2 && ans_Real_save[i]>out_Real_save[i])) 
+                    begin
+                        
+                    loss_error = loss_error+1;
                     // $display("--------------------------------------------------------------");
                     // $display("                   #( ‵□′)───C＜─___-)|||                    ");
-                    // $display("                      WRONG OUTPUT. #%5d                      ",i);
-                    // $display(" Your output is %3d, but the answer is %3d", out_Real_save[i], ans_Real_save[i]);
+                    $display("                      WRONG OUTPUT. #%5d                      ",i);
+                    $display(" Your output is %3d, but the answer is %3d", out_Real_save[i], ans_Real_save[i]);
                     // $display(" Your output is %3d, but the answer is %3d", out_Real_save[i], in_Real_save[i]);
-                    // $display("--------------------------------------------------------------");
+                    $display("--------------------------------------------------------------");
                     //$finish;
+                    end
                 end
             end
         end
@@ -213,6 +219,9 @@ initial begin
     $display("\033[1;32m********************************\033[m");
     $display("\033[1;36m********************************\033[m");
     $display("\033[1;36mYour total Error is   = %8d . \033[m",error );
+    $display("\033[1;36m********************************\033[m");
+    $display("\033[1;36m********************************\033[m");
+    $display("\033[1;36mYour loss  Error is   = %8d . \033[m",loss_error );
     $display("\033[1;36m********************************\033[m");
     $display("Congratulations!!!. \n\n");
     
