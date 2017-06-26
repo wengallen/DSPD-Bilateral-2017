@@ -26,7 +26,7 @@ input             finish;
 
 //////////////////////////////////////////////
 integer i, j, latency, total_latency;
-integer fptr,frtr1,frtr2,cnt,error,loss_error,amount;
+integer fptr,frtr1,frtr2,cnt,error,crti_error,amount;
 parameter data_count = 1; // num of dataset
 
 reg [7:0] in_save [0:65535];
@@ -46,7 +46,7 @@ initial begin
     total_latency = 0;
     latency = 0;
     error = 0;
-    loss_error = 0;
+    crti_error = 0;
     amount = 0;
     
     //LOAD  input data
@@ -61,7 +61,7 @@ initial begin
     
     //LOAD Correct ans
     $display("\n ==== Golden saved ===============");
-    frtr2 = $fopen("gold1.txt","r");
+    frtr2 = $fopen("gold1_v2.txt","r");
     for(j=0;j<data_count;j=j+1) begin
         for(i=65536*j;i<65536*j+65536;i=i+1)  begin 
             cnt=$fscanf(frtr2, "%d",ans_save[i]); 
@@ -155,7 +155,7 @@ initial begin
                     error=error+1;
                     if((out_save[i]-ans_save[i]>2 && out_save[i]>ans_save[i])|| (ans_save[i]-out_save[i]>2 && ans_save[i]>out_save[i])) 
                     begin
-                    loss_error = loss_error+1;
+                    crti_error = crti_error+1;
                     end 
                     // $display("--------------------------------------------------------------");
                     // $display("                   #( ‵□′)───C＜─___-)|||                    ");
@@ -178,7 +178,7 @@ initial begin
     
     
     //IF NO ERROR
-    fptr = $fopen("img1_out.txt");
+    fptr = $fopen("out.txt");
     
     // for(j=0; j<data_count; j=j+1)   begin
         // $display("==== Out_save ====== \n");
@@ -216,15 +216,15 @@ initial begin
     end
     
     $display(" \n ");
-    $display("\033[1;32m****************************************\033[m");
+    $display("\033[1;32m*******************************************\033[m");
     $display("\033[1;32mYour total latency is = %8d cycles. \033[m",total_latency );
-    $display("\033[1;32m****************************************\033[m");
-    $display("\033[1;36m****************************************\033[m");
-    $display("\033[1;36mYour total Error is   = %8d over %8d . \033[m",error,amount );
-    $display("\033[1;36m****************************************\033[m");
-    $display("\033[1;36m****************************************\033[m");
-    $display("\033[1;36mYour loss  Error is   = %8d over %8d . \033[m",loss_error,amount );
-    $display("\033[1;36m****************************************\033[m");
+    $display("\033[1;32m*******************************************\033[m");
+    $display("\033[1;36m*******************************************\033[m");
+    $display("\033[1;36mYour    total Error is   = %8d over %8d . \033[m",error,amount );
+    $display("\033[1;36m*******************************************\033[m");
+    $display("\033[1;36m*******************************************\033[m");
+    $display("\033[1;36mYour critical Error is   = %8d over %8d . \033[m",crti_error,amount );
+    $display("\033[1;36m*******************************************\033[m");
     $display("Congratulations!!!. \n\n");
     
     $finish;

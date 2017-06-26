@@ -27,13 +27,19 @@ initial begin
     `endif
     `ifdef GATE
         $sdf_annotate("blft_SYN.sdf",blft_CORE);
-        $dumpfile("blft_SYN.vcd");
-        $dumpvars();
+        $fsdbDumpfile("blft_SYN.fsdb");
+        $fsdbDumpvars;
+        $fsdbDumpMDA;
+        // $dumpfile("blft_SYN.vcd");
+        // $dumpvars();
     `endif
     `ifdef POST
         $sdf_annotate("blft_POST.sdf",blft_CORE);
-        $dumpfile("blft_POST.vcd");
-        $dumpvars();
+        $fsdbDumpfile("blft_POST.fsdb");
+        $fsdbDumpvars;
+        $fsdbDumpMDA;
+        // $dumpfile("blft_POST.vcd");
+        // $dumpvars();
     `endif
 end
 
