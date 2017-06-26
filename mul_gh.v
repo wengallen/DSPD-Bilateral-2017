@@ -1,17 +1,5 @@
 
 module mul_gh(
-    i000_g,i001_g,i002_g,i003_g,i004_g,i005_g,i006_g,i007_g,i008_g,i009_g,
-    i010_g,i011_g,i012_g,i013_g,i014_g,i015_g,i016_g,i017_g,i018_g,i019_g,
-    i020_g,i021_g,i022_g,i023_g,i024_g,i025_g,i026_g,i027_g,i028_g,i029_g,
-    i030_g,i031_g,i032_g,i033_g,i034_g,i035_g,i036_g,i037_g,i038_g,i039_g,
-    i040_g,i041_g,i042_g,i043_g,i044_g,i045_g,i046_g,i047_g,i048_g,i049_g,
-    i050_g,i051_g,i052_g,i053_g,i054_g,i055_g,i056_g,i057_g,i058_g,i059_g,
-    i060_g,i061_g,i062_g,i063_g,i064_g,i065_g,i066_g,i067_g,i068_g,i069_g,
-    i070_g,i071_g,i072_g,i073_g,i074_g,i075_g,i076_g,i077_g,i078_g,i079_g,
-    i080_g,i081_g,i082_g,i083_g,i084_g,i085_g,i086_g,i087_g,i088_g,i089_g,
-    i090_g,i091_g,i092_g,i093_g,i094_g,i095_g,i096_g,i097_g,i098_g,i099_g,
-    i100_g,i101_g,i102_g,i103_g,i104_g,i105_g,i106_g,i107_g,i108_g,i109_g,
-    i110_g,i111_g,i112_g,i113_g,i114_g,i115_g,i116_g,i117_g,i118_g,i119_g,i120_g,
     i000_h,i001_h,i002_h,i003_h,i004_h,i005_h,i006_h,i007_h,i008_h,i009_h,
     i010_h,i011_h,i012_h,i013_h,i014_h,i015_h,i016_h,i017_h,i018_h,i019_h,
     i020_h,i021_h,i022_h,i023_h,i024_h,i025_h,i026_h,i027_h,i028_h,i029_h,
@@ -52,19 +40,6 @@ module mul_gh(
 );
 
 //==== I/O port ==========================
-input  [13:0]  i000_g,i001_g,i002_g,i003_g,i004_g,i005_g,i006_g,i007_g,i008_g,i009_g;
-input  [13:0]  i010_g,i011_g,i012_g,i013_g,i014_g,i015_g,i016_g,i017_g,i018_g,i019_g;
-input  [13:0]  i020_g,i021_g,i022_g,i023_g,i024_g,i025_g,i026_g,i027_g,i028_g,i029_g;
-input  [13:0]  i030_g,i031_g,i032_g,i033_g,i034_g,i035_g,i036_g,i037_g,i038_g,i039_g;
-input  [13:0]  i040_g,i041_g,i042_g,i043_g,i044_g,i045_g,i046_g,i047_g,i048_g,i049_g;
-input  [13:0]  i050_g,i051_g,i052_g,i053_g,i054_g,i055_g,i056_g,i057_g,i058_g,i059_g;
-input  [13:0]  i060_g,i061_g,i062_g,i063_g,i064_g,i065_g,i066_g,i067_g,i068_g,i069_g;
-input  [13:0]  i070_g,i071_g,i072_g,i073_g,i074_g,i075_g,i076_g,i077_g,i078_g,i079_g;
-input  [13:0]  i080_g,i081_g,i082_g,i083_g,i084_g,i085_g,i086_g,i087_g,i088_g,i089_g;
-input  [13:0]  i090_g,i091_g,i092_g,i093_g,i094_g,i095_g,i096_g,i097_g,i098_g,i099_g;
-input  [13:0]  i100_g,i101_g,i102_g,i103_g,i104_g,i105_g,i106_g,i107_g,i108_g,i109_g;
-input  [13:0]  i110_g,i111_g,i112_g,i113_g,i114_g,i115_g,i116_g,i117_g,i118_g,i119_g,i120_g;
-
 input  [6:0]  i000_h,i001_h,i002_h,i003_h,i004_h,i005_h,i006_h,i007_h,i008_h,i009_h;
 input  [6:0]  i010_h,i011_h,i012_h,i013_h,i014_h,i015_h,i016_h,i017_h,i018_h,i019_h;
 input  [6:0]  i020_h,i021_h,i022_h,i023_h,i024_h,i025_h,i026_h,i027_h,i028_h,i029_h;
@@ -78,157 +53,157 @@ input  [6:0]  i090_h,i091_h,i092_h,i093_h,i094_h,i095_h,i096_h,i097_h,i098_h,i09
 input  [6:0]  i100_h,i101_h,i102_h,i103_h,i104_h,i105_h,i106_h,i107_h,i108_h,i109_h;
 input  [6:0]  i110_h,i111_h,i112_h,i113_h,i114_h,i115_h,i116_h,i117_h,i118_h,i119_h,i120_h;
 
-input  [19:0] reg000,reg001,reg002,reg003,reg004,reg005,reg006,reg007,reg008,reg009;
-input  [19:0] reg010,reg011,reg012,reg013,reg014,reg015,reg016,reg017,reg018,reg019;
-input  [19:0] reg020,reg021,reg022,reg023,reg024,reg025,reg026,reg027,reg028,reg029;
-input  [19:0] reg030,reg031,reg032,reg033,reg034,reg035,reg036,reg037,reg038,reg039;
-input  [19:0] reg040,reg041,reg042,reg043,reg044,reg045,reg046,reg047,reg048,reg049;
-input  [19:0] reg050,reg051,reg052,reg053,reg054,reg055,reg056,reg057,reg058,reg059;
-input  [19:0] reg060,reg061,reg062,reg063,reg064,reg065,reg066,reg067,reg068,reg069;
-input  [19:0] reg070,reg071,reg072,reg073,reg074,reg075,reg076,reg077,reg078,reg079;
-input  [19:0] reg080,reg081,reg082,reg083,reg084,reg085,reg086,reg087,reg088,reg089;
-input  [19:0] reg090,reg091,reg092,reg093,reg094,reg095,reg096,reg097,reg098,reg099;
-input  [19:0] reg100,reg101,reg102,reg103,reg104,reg105,reg106,reg107,reg108,reg109;
-input  [19:0] reg110,reg111,reg112,reg113,reg114,reg115,reg116,reg117,reg118,reg119,reg120;
+input  [12:0] reg000,reg001,reg002,reg003,reg004,reg005,reg006,reg007,reg008,reg009; // [19:0]
+input  [12:0] reg010,reg011,reg012,reg013,reg014,reg015,reg016,reg017,reg018,reg019; // [19:0]
+input  [12:0] reg020,reg021,reg022,reg023,reg024,reg025,reg026,reg027,reg028,reg029; // [19:0]
+input  [12:0] reg030,reg031,reg032,reg033,reg034,reg035,reg036,reg037,reg038,reg039; // [19:0]
+input  [12:0] reg040,reg041,reg042,reg043,reg044,reg045,reg046,reg047,reg048,reg049; // [19:0]
+input  [12:0] reg050,reg051,reg052,reg053,reg054,reg055,reg056,reg057,reg058,reg059; // [19:0]
+input  [12:0] reg060,reg061,reg062,reg063,reg064,reg065,reg066,reg067,reg068,reg069; // [19:0]
+input  [12:0] reg070,reg071,reg072,reg073,reg074,reg075,reg076,reg077,reg078,reg079; // [19:0]
+input  [12:0] reg080,reg081,reg082,reg083,reg084,reg085,reg086,reg087,reg088,reg089; // [19:0]
+input  [12:0] reg090,reg091,reg092,reg093,reg094,reg095,reg096,reg097,reg098,reg099; // [19:0]
+input  [12:0] reg100,reg101,reg102,reg103,reg104,reg105,reg106,reg107,reg108,reg109; // [19:0]
+input  [12:0] reg110,reg111,reg112,reg113,reg114,reg115,reg116,reg117,reg118,reg119,reg120; // [19:0]
 
-output reg [20:0] out000,out001,out002,out003,out004,out005,out006,out007,out008,out009;
-output reg [20:0] out010,out011,out012,out013,out014,out015,out016,out017,out018,out019;
-output reg [20:0] out020,out021,out022,out023,out024,out025,out026,out027,out028,out029;
-output reg [20:0] out030,out031,out032,out033,out034,out035,out036,out037,out038,out039;
-output reg [20:0] out040,out041,out042,out043,out044,out045,out046,out047,out048,out049;
-output reg [20:0] out050,out051,out052,out053,out054,out055,out056,out057,out058,out059;
-output reg [20:0] out060,out061,out062,out063,out064,out065,out066,out067,out068,out069;
-output reg [20:0] out070,out071,out072,out073,out074,out075,out076,out077,out078,out079;
-output reg [20:0] out080,out081,out082,out083,out084,out085,out086,out087,out088,out089;
-output reg [20:0] out090,out091,out092,out093,out094,out095,out096,out097,out098,out099;
-output reg [20:0] out100,out101,out102,out103,out104,out105,out106,out107,out108,out109;
-output reg [20:0] out110,out111,out112,out113,out114,out115,out116,out117,out118,out119,out120;
+output reg [13:0] out000,out001,out002,out003,out004,out005,out006,out007,out008,out009; // [20:0]
+output reg [13:0] out010,out011,out012,out013,out014,out015,out016,out017,out018,out019; // [20:0]
+output reg [13:0] out020,out021,out022,out023,out024,out025,out026,out027,out028,out029; // [20:0]
+output reg [13:0] out030,out031,out032,out033,out034,out035,out036,out037,out038,out039; // [20:0]
+output reg [13:0] out040,out041,out042,out043,out044,out045,out046,out047,out048,out049; // [20:0]
+output reg [13:0] out050,out051,out052,out053,out054,out055,out056,out057,out058,out059; // [20:0]
+output reg [13:0] out060,out061,out062,out063,out064,out065,out066,out067,out068,out069; // [20:0]
+output reg [13:0] out070,out071,out072,out073,out074,out075,out076,out077,out078,out079; // [20:0]
+output reg [13:0] out080,out081,out082,out083,out084,out085,out086,out087,out088,out089; // [20:0]
+output reg [13:0] out090,out091,out092,out093,out094,out095,out096,out097,out098,out099; // [20:0]
+output reg [13:0] out100,out101,out102,out103,out104,out105,out106,out107,out108,out109; // [20:0]
+output reg [13:0] out110,out111,out112,out113,out114,out115,out116,out117,out118,out119,out120; // [20:0]
 
 input   en;
 
 always@(*) begin
     if(en) begin
-        out000 = i000_g * i000_h;
-        out001 = i001_g * i001_h;
-        out002 = i002_g * i002_h;
-        out003 = i003_g * i003_h;
-        out004 = i004_g * i004_h;
-        out005 = i005_g * i005_h;
-        out006 = i006_g * i006_h;
-        out007 = i007_g * i007_h;
-        out008 = i008_g * i008_h;
-        out009 = i009_g * i009_h;
-        out010 = i010_g * i010_h;
-        out011 = i011_g * i011_h;
-        out012 = i012_g * i012_h;
-        out013 = i013_g * i013_h;
-        out014 = i014_g * i014_h;
-        out015 = i015_g * i015_h;
-        out016 = i016_g * i016_h;
-        out017 = i017_g * i017_h;
-        out018 = i018_g * i018_h;
-        out019 = i019_g * i019_h;
-        out020 = i020_g * i020_h;
-        out021 = i021_g * i021_h;
-        out022 = i022_g * i022_h;
-        out023 = i023_g * i023_h;
-        out024 = i024_g * i024_h;
-        out025 = i025_g * i025_h;
-        out026 = i026_g * i026_h;
-        out027 = i027_g * i027_h;
-        out028 = i028_g * i028_h;
-        out029 = i029_g * i029_h;
-        out030 = i030_g * i030_h;
-        out031 = i031_g * i031_h;
-        out032 = i032_g * i032_h;
-        out033 = i033_g * i033_h;
-        out034 = i034_g * i034_h;
-        out035 = i035_g * i035_h;
-        out036 = i036_g * i036_h;
-        out037 = i037_g * i037_h;
-        out038 = i038_g * i038_h;
-        out039 = i039_g * i039_h;
-        out040 = i040_g * i040_h;
-        out041 = i041_g * i041_h;
-        out042 = i042_g * i042_h;
-        out043 = i043_g * i043_h;
-        out044 = i044_g * i044_h;
-        out045 = i045_g * i045_h;
-        out046 = i046_g * i046_h;
-        out047 = i047_g * i047_h;
-        out048 = i048_g * i048_h;
-        out049 = i049_g * i049_h;
-        out050 = i050_g * i050_h;
-        out051 = i051_g * i051_h;
-        out052 = i052_g * i052_h;
-        out053 = i053_g * i053_h;
-        out054 = i054_g * i054_h;
-        out055 = i055_g * i055_h;
-        out056 = i056_g * i056_h;
-        out057 = i057_g * i057_h;
-        out058 = i058_g * i058_h;
-        out059 = i059_g * i059_h;
-        out060 = i060_g * i060_h;
-        out061 = i061_g * i061_h;
-        out062 = i062_g * i062_h;
-        out063 = i063_g * i063_h;
-        out064 = i064_g * i064_h;
-        out065 = i065_g * i065_h;
-        out066 = i066_g * i066_h;
-        out067 = i067_g * i067_h;
-        out068 = i068_g * i068_h;
-        out069 = i069_g * i069_h;
-        out070 = i070_g * i070_h;
-        out071 = i071_g * i071_h;
-        out072 = i072_g * i072_h;
-        out073 = i073_g * i073_h;
-        out074 = i074_g * i074_h;
-        out075 = i075_g * i075_h;
-        out076 = i076_g * i076_h;
-        out077 = i077_g * i077_h;
-        out078 = i078_g * i078_h;
-        out079 = i079_g * i079_h;
-        out080 = i080_g * i080_h;
-        out081 = i081_g * i081_h;
-        out082 = i082_g * i082_h;
-        out083 = i083_g * i083_h;
-        out084 = i084_g * i084_h;
-        out085 = i085_g * i085_h;
-        out086 = i086_g * i086_h;
-        out087 = i087_g * i087_h;
-        out088 = i088_g * i088_h;
-        out089 = i089_g * i089_h;
-        out090 = i090_g * i090_h;
-        out091 = i091_g * i091_h;
-        out092 = i092_g * i092_h;
-        out093 = i093_g * i093_h;
-        out094 = i094_g * i094_h;
-        out095 = i095_g * i095_h;
-        out096 = i096_g * i096_h;
-        out097 = i097_g * i097_h;
-        out098 = i098_g * i098_h;
-        out099 = i099_g * i099_h;
-        out100 = i100_g * i100_h;
-        out101 = i101_g * i101_h;
-        out102 = i102_g * i102_h;
-        out103 = i103_g * i103_h;
-        out104 = i104_g * i104_h;
-        out105 = i105_g * i105_h;
-        out106 = i106_g * i106_h;
-        out107 = i107_g * i107_h;
-        out108 = i108_g * i108_h;
-        out109 = i109_g * i109_h;
-        out110 = i110_g * i110_h;
-        out111 = i111_g * i111_h;
-        out112 = i112_g * i112_h;
-        out113 = i113_g * i113_h;
-        out114 = i114_g * i114_h;
-        out115 = i115_g * i115_h;
-        out116 = i116_g * i116_h;
-        out117 = i117_g * i117_h;
-        out118 = i118_g * i118_h;
-        out119 = i119_g * i119_h;
-        out120 = i120_g * i120_h;
+        out000 = i000_h * 7'b0_000100; //0.0625
+        out001 = i001_h * 7'b0_000111; //0.1094
+        out002 = i002_h * 7'b0_001010; //0.1563
+        out003 = i003_h * 7'b0_001101; //0.2031
+        out004 = i004_h * 7'b0_001111; //0.2344
+        out005 = i005_h * 7'b0_010000; //0.2500
+        out006 = i006_h * 7'b0_001111; //0.2344
+        out007 = i007_h * 7'b0_001101; //0.2031
+        out008 = i008_h * 7'b0_001010; //0.1563
+        out009 = i009_h * 7'b0_000111; //0.1094
+        out010 = i010_h * 7'b0_000100; //0.0625
+        out011 = i011_h * 7'b0_000111; //0.1094
+        out012 = i012_h * 7'b0_001011; //0.1719
+        out013 = i013_h * 7'b0_010000; //0.2500
+        out014 = i014_h * 7'b0_010101; //0.3281
+        out015 = i015_h * 7'b0_011001; //0.3906
+        out016 = i016_h * 7'b0_011010; //0.4063
+        out017 = i017_h * 7'b0_011001; //0.3906
+        out018 = i018_h * 7'b0_010101; //0.3281
+        out019 = i019_h * 7'b0_010000; //0.2500
+        out020 = i020_h * 7'b0_001011; //0.1719
+        out021 = i021_h * 7'b0_000111; //0.1094
+        out022 = i022_h * 7'b0_001010; //0.1563
+        out023 = i023_h * 7'b0_010000; //0.2500
+        out024 = i024_h * 7'b0_011000; //0.3750
+        out025 = i025_h * 7'b0_011111; //0.4844
+        out026 = i026_h * 7'b0_100101; //0.5781
+        out027 = i027_h * 7'b0_100111; //0.6094
+        out028 = i028_h * 7'b0_100101; //0.5781
+        out029 = i029_h * 7'b0_011111; //0.4844
+        out030 = i030_h * 7'b0_011000; //0.3750
+        out031 = i031_h * 7'b0_010000; //0.2500
+        out032 = i032_h * 7'b0_001010; //0.1563
+        out033 = i033_h * 7'b0_001101; //0.2031
+        out034 = i034_h * 7'b0_010101; //0.3281
+        out035 = i035_h * 7'b0_011111; //0.4844
+        out036 = i036_h * 7'b0_101001; //0.6406
+        out037 = i037_h * 7'b0_110000; //0.7500
+        out038 = i038_h * 7'b0_110011; //0.7969
+        out039 = i039_h * 7'b0_110000; //0.7500
+        out040 = i040_h * 7'b0_101001; //0.6406
+        out041 = i041_h * 7'b0_011111; //0.4844
+        out042 = i042_h * 7'b0_010101; //0.3281
+        out043 = i043_h * 7'b0_001101; //0.2031
+        out044 = i044_h * 7'b0_001111; //0.2344
+        out045 = i045_h * 7'b0_011001; //0.3906
+        out046 = i046_h * 7'b0_100101; //0.5781
+        out047 = i047_h * 7'b0_110000; //0.7500
+        out048 = i048_h * 7'b0_111001; //0.8906
+        out049 = i049_h * 7'b0_111101; //0.9531
+        out050 = i050_h * 7'b0_111001; //0.8906
+        out051 = i051_h * 7'b0_110000; //0.7500
+        out052 = i052_h * 7'b0_100101; //0.5781
+        out053 = i053_h * 7'b0_011001; //0.3906
+        out054 = i054_h * 7'b0_001111; //0.2344
+        out055 = i055_h * 7'b0_010000; //0.2500
+        out056 = i056_h * 7'b0_011010; //0.4063
+        out057 = i057_h * 7'b0_100111; //0.6094
+        out058 = i058_h * 7'b0_110011; //0.7969
+        out059 = i059_h * 7'b0_111101; //0.9531
+        out060 = i060_h * 7'b1_000000; //1.0000
+        out061 = i061_h * 7'b0_111101; //0.9531
+        out062 = i062_h * 7'b0_110011; //0.7969
+        out063 = i063_h * 7'b0_100111; //0.6094
+        out064 = i064_h * 7'b0_011010; //0.4063
+        out065 = i065_h * 7'b0_010000; //0.2500
+        out066 = i066_h * 7'b0_001111; //0.2344
+        out067 = i067_h * 7'b0_011001; //0.3906
+        out068 = i068_h * 7'b0_100101; //0.5781
+        out069 = i069_h * 7'b0_110000; //0.7500
+        out070 = i070_h * 7'b0_111001; //0.8906
+        out071 = i071_h * 7'b0_111101; //0.9531
+        out072 = i072_h * 7'b0_111001; //0.8906
+        out073 = i073_h * 7'b0_110000; //0.7500
+        out074 = i074_h * 7'b0_100101; //0.5781
+        out075 = i075_h * 7'b0_011001; //0.3906
+        out076 = i076_h * 7'b0_001111; //0.2344
+        out077 = i077_h * 7'b0_001101; //0.2031
+        out078 = i078_h * 7'b0_010101; //0.3281
+        out079 = i079_h * 7'b0_011111; //0.4844
+        out080 = i080_h * 7'b0_101001; //0.6406
+        out081 = i081_h * 7'b0_110000; //0.7500
+        out082 = i082_h * 7'b0_110011; //0.7969
+        out083 = i083_h * 7'b0_110000; //0.7500
+        out084 = i084_h * 7'b0_101001; //0.6406
+        out085 = i085_h * 7'b0_011111; //0.4844
+        out086 = i086_h * 7'b0_010101; //0.3281
+        out087 = i087_h * 7'b0_001101; //0.2031
+        out088 = i088_h * 7'b0_001010; //0.1563
+        out089 = i089_h * 7'b0_010000; //0.2500
+        out090 = i090_h * 7'b0_011000; //0.3750
+        out091 = i091_h * 7'b0_011111; //0.4844
+        out092 = i092_h * 7'b0_100101; //0.5781
+        out093 = i093_h * 7'b0_100111; //0.6094
+        out094 = i094_h * 7'b0_100101; //0.5781
+        out095 = i095_h * 7'b0_011111; //0.4844
+        out096 = i096_h * 7'b0_011000; //0.3750
+        out097 = i097_h * 7'b0_010000; //0.2500
+        out098 = i098_h * 7'b0_001010; //0.1563
+        out099 = i099_h * 7'b0_000111; //0.1094
+        out100 = i100_h * 7'b0_001011; //0.1719
+        out101 = i101_h * 7'b0_010000; //0.2500
+        out102 = i102_h * 7'b0_010101; //0.3281
+        out103 = i103_h * 7'b0_011001; //0.3906
+        out104 = i104_h * 7'b0_011010; //0.4063
+        out105 = i105_h * 7'b0_011001; //0.3906
+        out106 = i106_h * 7'b0_010101; //0.3281
+        out107 = i107_h * 7'b0_010000; //0.2500
+        out108 = i108_h * 7'b0_001011; //0.1719
+        out109 = i109_h * 7'b0_000111; //0.1094
+        out110 = i110_h * 7'b0_000100; //0.0625
+        out111 = i111_h * 7'b0_000111; //0.1094
+        out112 = i112_h * 7'b0_001010; //0.1563
+        out113 = i113_h * 7'b0_001101; //0.2031
+        out114 = i114_h * 7'b0_001111; //0.2344
+        out115 = i115_h * 7'b0_010000; //0.2500
+        out116 = i116_h * 7'b0_001111; //0.2344
+        out117 = i117_h * 7'b0_001101; //0.2031
+        out118 = i118_h * 7'b0_001010; //0.1563
+        out119 = i119_h * 7'b0_000111; //0.1094
+        out120 = i120_h * 7'b0_000100; //0.0625
     end
     else begin
         out000 = {1'b0,reg000};

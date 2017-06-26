@@ -52,18 +52,18 @@ module mul_ghi(
 );
 
 //==== I/O port ==========================
-input  [21:0] i000_gi,i001_gi,i002_gi,i003_gi,i004_gi,i005_gi,i006_gi,i007_gi,i008_gi,i009_gi;
-input  [21:0] i010_gi,i011_gi,i012_gi,i013_gi,i014_gi,i015_gi,i016_gi,i017_gi,i018_gi,i019_gi;
-input  [21:0] i020_gi,i021_gi,i022_gi,i023_gi,i024_gi,i025_gi,i026_gi,i027_gi,i028_gi,i029_gi;
-input  [21:0] i030_gi,i031_gi,i032_gi,i033_gi,i034_gi,i035_gi,i036_gi,i037_gi,i038_gi,i039_gi;
-input  [21:0] i040_gi,i041_gi,i042_gi,i043_gi,i044_gi,i045_gi,i046_gi,i047_gi,i048_gi,i049_gi;
-input  [21:0] i050_gi,i051_gi,i052_gi,i053_gi,i054_gi,i055_gi,i056_gi,i057_gi,i058_gi,i059_gi;
-input  [21:0] i060_gi,i061_gi,i062_gi,i063_gi,i064_gi,i065_gi,i066_gi,i067_gi,i068_gi,i069_gi;
-input  [21:0] i070_gi,i071_gi,i072_gi,i073_gi,i074_gi,i075_gi,i076_gi,i077_gi,i078_gi,i079_gi;
-input  [21:0] i080_gi,i081_gi,i082_gi,i083_gi,i084_gi,i085_gi,i086_gi,i087_gi,i088_gi,i089_gi;
-input  [21:0] i090_gi,i091_gi,i092_gi,i093_gi,i094_gi,i095_gi,i096_gi,i097_gi,i098_gi,i099_gi;
-input  [21:0] i100_gi,i101_gi,i102_gi,i103_gi,i104_gi,i105_gi,i106_gi,i107_gi,i108_gi,i109_gi;
-input  [21:0] i110_gi,i111_gi,i112_gi,i113_gi,i114_gi,i115_gi,i116_gi,i117_gi,i118_gi,i119_gi,i120_gi;
+input  [13:0] i000_gi,i001_gi,i002_gi,i003_gi,i004_gi,i005_gi,i006_gi,i007_gi,i008_gi,i009_gi;
+input  [13:0] i010_gi,i011_gi,i012_gi,i013_gi,i014_gi,i015_gi,i016_gi,i017_gi,i018_gi,i019_gi;
+input  [13:0] i020_gi,i021_gi,i022_gi,i023_gi,i024_gi,i025_gi,i026_gi,i027_gi,i028_gi,i029_gi;
+input  [13:0] i030_gi,i031_gi,i032_gi,i033_gi,i034_gi,i035_gi,i036_gi,i037_gi,i038_gi,i039_gi;
+input  [13:0] i040_gi,i041_gi,i042_gi,i043_gi,i044_gi,i045_gi,i046_gi,i047_gi,i048_gi,i049_gi;
+input  [13:0] i050_gi,i051_gi,i052_gi,i053_gi,i054_gi,i055_gi,i056_gi,i057_gi,i058_gi,i059_gi;
+input  [13:0] i060_gi,i061_gi,i062_gi,i063_gi,i064_gi,i065_gi,i066_gi,i067_gi,i068_gi,i069_gi;
+input  [13:0] i070_gi,i071_gi,i072_gi,i073_gi,i074_gi,i075_gi,i076_gi,i077_gi,i078_gi,i079_gi;
+input  [13:0] i080_gi,i081_gi,i082_gi,i083_gi,i084_gi,i085_gi,i086_gi,i087_gi,i088_gi,i089_gi;
+input  [13:0] i090_gi,i091_gi,i092_gi,i093_gi,i094_gi,i095_gi,i096_gi,i097_gi,i098_gi,i099_gi;
+input  [13:0] i100_gi,i101_gi,i102_gi,i103_gi,i104_gi,i105_gi,i106_gi,i107_gi,i108_gi,i109_gi;
+input  [13:0] i110_gi,i111_gi,i112_gi,i113_gi,i114_gi,i115_gi,i116_gi,i117_gi,i118_gi,i119_gi,i120_gi;
 
 input  [6:0]  i000_h,i001_h,i002_h,i003_h,i004_h,i005_h,i006_h,i007_h,i008_h,i009_h;
 input  [6:0]  i010_h,i011_h,i012_h,i013_h,i014_h,i015_h,i016_h,i017_h,i018_h,i019_h;
@@ -78,31 +78,31 @@ input  [6:0]  i090_h,i091_h,i092_h,i093_h,i094_h,i095_h,i096_h,i097_h,i098_h,i09
 input  [6:0]  i100_h,i101_h,i102_h,i103_h,i104_h,i105_h,i106_h,i107_h,i108_h,i109_h;
 input  [6:0]  i110_h,i111_h,i112_h,i113_h,i114_h,i115_h,i116_h,i117_h,i118_h,i119_h,i120_h;
 
-input  [27:0] reg000,reg001,reg002,reg003,reg004,reg005,reg006,reg007,reg008,reg009;
-input  [27:0] reg010,reg011,reg012,reg013,reg014,reg015,reg016,reg017,reg018,reg019;
-input  [27:0] reg020,reg021,reg022,reg023,reg024,reg025,reg026,reg027,reg028,reg029;
-input  [27:0] reg030,reg031,reg032,reg033,reg034,reg035,reg036,reg037,reg038,reg039;
-input  [27:0] reg040,reg041,reg042,reg043,reg044,reg045,reg046,reg047,reg048,reg049;
-input  [27:0] reg050,reg051,reg052,reg053,reg054,reg055,reg056,reg057,reg058,reg059;
-input  [27:0] reg060,reg061,reg062,reg063,reg064,reg065,reg066,reg067,reg068,reg069;
-input  [27:0] reg070,reg071,reg072,reg073,reg074,reg075,reg076,reg077,reg078,reg079;
-input  [27:0] reg080,reg081,reg082,reg083,reg084,reg085,reg086,reg087,reg088,reg089;
-input  [27:0] reg090,reg091,reg092,reg093,reg094,reg095,reg096,reg097,reg098,reg099;
-input  [27:0] reg100,reg101,reg102,reg103,reg104,reg105,reg106,reg107,reg108,reg109;
-input  [27:0] reg110,reg111,reg112,reg113,reg114,reg115,reg116,reg117,reg118,reg119,reg120;
+input  [19:0] reg000,reg001,reg002,reg003,reg004,reg005,reg006,reg007,reg008,reg009;
+input  [19:0] reg010,reg011,reg012,reg013,reg014,reg015,reg016,reg017,reg018,reg019;
+input  [19:0] reg020,reg021,reg022,reg023,reg024,reg025,reg026,reg027,reg028,reg029;
+input  [19:0] reg030,reg031,reg032,reg033,reg034,reg035,reg036,reg037,reg038,reg039;
+input  [19:0] reg040,reg041,reg042,reg043,reg044,reg045,reg046,reg047,reg048,reg049;
+input  [19:0] reg050,reg051,reg052,reg053,reg054,reg055,reg056,reg057,reg058,reg059;
+input  [19:0] reg060,reg061,reg062,reg063,reg064,reg065,reg066,reg067,reg068,reg069;
+input  [19:0] reg070,reg071,reg072,reg073,reg074,reg075,reg076,reg077,reg078,reg079;
+input  [19:0] reg080,reg081,reg082,reg083,reg084,reg085,reg086,reg087,reg088,reg089;
+input  [19:0] reg090,reg091,reg092,reg093,reg094,reg095,reg096,reg097,reg098,reg099;
+input  [19:0] reg100,reg101,reg102,reg103,reg104,reg105,reg106,reg107,reg108,reg109;
+input  [19:0] reg110,reg111,reg112,reg113,reg114,reg115,reg116,reg117,reg118,reg119,reg120;
 
-output reg [28:0] out000,out001,out002,out003,out004,out005,out006,out007,out008,out009;
-output reg [28:0] out010,out011,out012,out013,out014,out015,out016,out017,out018,out019;
-output reg [28:0] out020,out021,out022,out023,out024,out025,out026,out027,out028,out029;
-output reg [28:0] out030,out031,out032,out033,out034,out035,out036,out037,out038,out039;
-output reg [28:0] out040,out041,out042,out043,out044,out045,out046,out047,out048,out049;
-output reg [28:0] out050,out051,out052,out053,out054,out055,out056,out057,out058,out059;
-output reg [28:0] out060,out061,out062,out063,out064,out065,out066,out067,out068,out069;
-output reg [28:0] out070,out071,out072,out073,out074,out075,out076,out077,out078,out079;
-output reg [28:0] out080,out081,out082,out083,out084,out085,out086,out087,out088,out089;
-output reg [28:0] out090,out091,out092,out093,out094,out095,out096,out097,out098,out099;
-output reg [28:0] out100,out101,out102,out103,out104,out105,out106,out107,out108,out109;
-output reg [28:0] out110,out111,out112,out113,out114,out115,out116,out117,out118,out119,out120;
+output reg [20:0] out000,out001,out002,out003,out004,out005,out006,out007,out008,out009;
+output reg [20:0] out010,out011,out012,out013,out014,out015,out016,out017,out018,out019;
+output reg [20:0] out020,out021,out022,out023,out024,out025,out026,out027,out028,out029;
+output reg [20:0] out030,out031,out032,out033,out034,out035,out036,out037,out038,out039;
+output reg [20:0] out040,out041,out042,out043,out044,out045,out046,out047,out048,out049;
+output reg [20:0] out050,out051,out052,out053,out054,out055,out056,out057,out058,out059;
+output reg [20:0] out060,out061,out062,out063,out064,out065,out066,out067,out068,out069;
+output reg [20:0] out070,out071,out072,out073,out074,out075,out076,out077,out078,out079;
+output reg [20:0] out080,out081,out082,out083,out084,out085,out086,out087,out088,out089;
+output reg [20:0] out090,out091,out092,out093,out094,out095,out096,out097,out098,out099;
+output reg [20:0] out100,out101,out102,out103,out104,out105,out106,out107,out108,out109;
+output reg [20:0] out110,out111,out112,out113,out114,out115,out116,out117,out118,out119,out120;
 
 input   en;
 

@@ -17,29 +17,29 @@ module sum_ghi(
 );
 
 //==== I/O port ==========================
-input  [27:0] ghi000,ghi001,ghi002,ghi003,ghi004,ghi005,ghi006,ghi007,ghi008,ghi009;
-input  [27:0] ghi010,ghi011,ghi012,ghi013,ghi014,ghi015,ghi016,ghi017,ghi018,ghi019;
-input  [27:0] ghi020,ghi021,ghi022,ghi023,ghi024,ghi025,ghi026,ghi027,ghi028,ghi029;
-input  [27:0] ghi030,ghi031,ghi032,ghi033,ghi034,ghi035,ghi036,ghi037,ghi038,ghi039;
-input  [27:0] ghi040,ghi041,ghi042,ghi043,ghi044,ghi045,ghi046,ghi047,ghi048,ghi049;
-input  [27:0] ghi050,ghi051,ghi052,ghi053,ghi054,ghi055,ghi056,ghi057,ghi058,ghi059;
-input  [27:0] ghi060,ghi061,ghi062,ghi063,ghi064,ghi065,ghi066,ghi067,ghi068,ghi069;
-input  [27:0] ghi070,ghi071,ghi072,ghi073,ghi074,ghi075,ghi076,ghi077,ghi078,ghi079;
-input  [27:0] ghi080,ghi081,ghi082,ghi083,ghi084,ghi085,ghi086,ghi087,ghi088,ghi089;
-input  [27:0] ghi090,ghi091,ghi092,ghi093,ghi094,ghi095,ghi096,ghi097,ghi098,ghi099;
-input  [27:0] ghi100,ghi101,ghi102,ghi103,ghi104,ghi105,ghi106,ghi107,ghi108,ghi109;
-input  [27:0] ghi110,ghi111,ghi112,ghi113,ghi114,ghi115,ghi116,ghi117,ghi118,ghi119,ghi120;
+input  [19:0] ghi000,ghi001,ghi002,ghi003,ghi004,ghi005,ghi006,ghi007,ghi008,ghi009;
+input  [19:0] ghi010,ghi011,ghi012,ghi013,ghi014,ghi015,ghi016,ghi017,ghi018,ghi019;
+input  [19:0] ghi020,ghi021,ghi022,ghi023,ghi024,ghi025,ghi026,ghi027,ghi028,ghi029;
+input  [19:0] ghi030,ghi031,ghi032,ghi033,ghi034,ghi035,ghi036,ghi037,ghi038,ghi039;
+input  [19:0] ghi040,ghi041,ghi042,ghi043,ghi044,ghi045,ghi046,ghi047,ghi048,ghi049;
+input  [19:0] ghi050,ghi051,ghi052,ghi053,ghi054,ghi055,ghi056,ghi057,ghi058,ghi059;
+input  [19:0] ghi060,ghi061,ghi062,ghi063,ghi064,ghi065,ghi066,ghi067,ghi068,ghi069;
+input  [19:0] ghi070,ghi071,ghi072,ghi073,ghi074,ghi075,ghi076,ghi077,ghi078,ghi079;
+input  [19:0] ghi080,ghi081,ghi082,ghi083,ghi084,ghi085,ghi086,ghi087,ghi088,ghi089;
+input  [19:0] ghi090,ghi091,ghi092,ghi093,ghi094,ghi095,ghi096,ghi097,ghi098,ghi099;
+input  [19:0] ghi100,ghi101,ghi102,ghi103,ghi104,ghi105,ghi106,ghi107,ghi108,ghi109;
+input  [19:0] ghi110,ghi111,ghi112,ghi113,ghi114,ghi115,ghi116,ghi117,ghi118,ghi119,ghi120;
 
-output reg [34:0] out_sum;
-input  [34:0] reg_sum;
-input   en;
+output reg [26:0] out_sum;
+input      [26:0] reg_sum;
+input             en;
 
-wire [28:0] temp2[0:60];
-wire [29:0] temp4[0:30];
-wire [30:0] temp8[0:15];
-wire [31:0] temp16[0:7];
-wire [32:0] temp32[0:3];
-wire [33:0] temp64[0:1];
+wire [20:0] temp2[0:60];
+wire [21:0] temp4[0:30];
+wire [22:0] temp8[0:15];
+wire [23:0] temp16[0:7];
+wire [24:0] temp32[0:3];
+wire [25:0] temp64[0:1];
 
 assign temp2[0 ] = ghi000 + ghi001;
 assign temp2[1 ] = ghi002 + ghi003;

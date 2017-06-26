@@ -17,29 +17,29 @@ module sum_gh(
 );
 
 //==== I/O port ==========================
-input  [19:0] gh000,gh001,gh002,gh003,gh004,gh005,gh006,gh007,gh008,gh009;
-input  [19:0] gh010,gh011,gh012,gh013,gh014,gh015,gh016,gh017,gh018,gh019;
-input  [19:0] gh020,gh021,gh022,gh023,gh024,gh025,gh026,gh027,gh028,gh029;
-input  [19:0] gh030,gh031,gh032,gh033,gh034,gh035,gh036,gh037,gh038,gh039;
-input  [19:0] gh040,gh041,gh042,gh043,gh044,gh045,gh046,gh047,gh048,gh049;
-input  [19:0] gh050,gh051,gh052,gh053,gh054,gh055,gh056,gh057,gh058,gh059;
-input  [19:0] gh060,gh061,gh062,gh063,gh064,gh065,gh066,gh067,gh068,gh069;
-input  [19:0] gh070,gh071,gh072,gh073,gh074,gh075,gh076,gh077,gh078,gh079;
-input  [19:0] gh080,gh081,gh082,gh083,gh084,gh085,gh086,gh087,gh088,gh089;
-input  [19:0] gh090,gh091,gh092,gh093,gh094,gh095,gh096,gh097,gh098,gh099;
-input  [19:0] gh100,gh101,gh102,gh103,gh104,gh105,gh106,gh107,gh108,gh109;
-input  [19:0] gh110,gh111,gh112,gh113,gh114,gh115,gh116,gh117,gh118,gh119,gh120;
+input  [12:0] gh000,gh001,gh002,gh003,gh004,gh005,gh006,gh007,gh008,gh009; // [19:0]
+input  [12:0] gh010,gh011,gh012,gh013,gh014,gh015,gh016,gh017,gh018,gh019; // [19:0]
+input  [12:0] gh020,gh021,gh022,gh023,gh024,gh025,gh026,gh027,gh028,gh029; // [19:0]
+input  [12:0] gh030,gh031,gh032,gh033,gh034,gh035,gh036,gh037,gh038,gh039; // [19:0]
+input  [12:0] gh040,gh041,gh042,gh043,gh044,gh045,gh046,gh047,gh048,gh049; // [19:0]
+input  [12:0] gh050,gh051,gh052,gh053,gh054,gh055,gh056,gh057,gh058,gh059; // [19:0]
+input  [12:0] gh060,gh061,gh062,gh063,gh064,gh065,gh066,gh067,gh068,gh069; // [19:0]
+input  [12:0] gh070,gh071,gh072,gh073,gh074,gh075,gh076,gh077,gh078,gh079; // [19:0]
+input  [12:0] gh080,gh081,gh082,gh083,gh084,gh085,gh086,gh087,gh088,gh089; // [19:0]
+input  [12:0] gh090,gh091,gh092,gh093,gh094,gh095,gh096,gh097,gh098,gh099; // [19:0]
+input  [12:0] gh100,gh101,gh102,gh103,gh104,gh105,gh106,gh107,gh108,gh109; // [19:0]
+input  [12:0] gh110,gh111,gh112,gh113,gh114,gh115,gh116,gh117,gh118,gh119,gh120; // [19:0]
 
-output reg [26:0] out_sum;
-input  [26:0] reg_sum;
+output reg [19:0] out_sum;
+input      [19:0] reg_sum;
 input   en;
 
-wire [20:0] temp2[0:60];
-wire [21:0] temp4[0:30];
-wire [22:0] temp8[0:15];
-wire [23:0] temp16[0:7];
-wire [24:0] temp32[0:3];
-wire [25:0] temp64[0:1];
+wire [13:0] temp2[0:60];
+wire [14:0] temp4[0:30];
+wire [15:0] temp8[0:15];
+wire [16:0] temp16[0:7];
+wire [17:0] temp32[0:3];
+wire [18:0] temp64[0:1];
 
 assign temp2[0 ] = gh000 + gh001;
 assign temp2[1 ] = gh002 + gh003;
