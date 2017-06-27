@@ -61,7 +61,7 @@ initial begin
     
     //LOAD Correct ans
     $display("\n ==== Golden saved ===============");
-    frtr2 = $fopen("gold1_v2.txt","r");
+    frtr2 = $fopen("gold1_v1.txt","r");
     for(j=0;j<data_count;j=j+1) begin
         for(i=65536*j;i<65536*j+65536;i=i+1)  begin 
             cnt=$fscanf(frtr2, "%d",ans_save[i]); 
@@ -70,6 +70,9 @@ initial begin
     $fclose(frtr2);
     
     
+    @(negedge clk) rst = 1;
+    @(negedge clk) rst = 1;
+    @(negedge clk) rst = 1;
     @(negedge clk) rst = 1;
     @(negedge clk) rst = 0;
     

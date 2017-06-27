@@ -182,7 +182,7 @@ always@(*) begin
     end
     1:begin
         for(i=0;i<121;i=i+1)begin
-            LUT_r[i]=LUT_w[i];
+            LUT_w[i]=LUT_r[i];
         end
     end
     endcase

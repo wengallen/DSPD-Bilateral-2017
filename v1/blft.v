@@ -50,8 +50,8 @@ reg         finish_w;
 reg  [6:0]  addr_mapi_r;
 reg  [6:0]  addr_mapi_w;
 
-reg  [3:0]  state_r;
-reg  [3:0]  state_w;
+reg  [2:0]  state_r;
+reg  [2:0]  state_w;
 reg  [3:0]  sub_state_r;
 reg  [3:0]  sub_state_w;
 reg  [7:0]  row_cntr_r;

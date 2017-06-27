@@ -1,0 +1,30 @@
+ 
+****************************************
+Report : area
+Design : blft
+Version: M-2016.12
+Date   : Tue Jun 27 02:46:00 2017
+****************************************
+
+Library(s) Used:
+
+    slow (File: /cad/cell_library/CBDK_TSMC90G_Arm/CIC/SynopsysDC/db/slow.db)
+
+Number of ports:                        32524
+Number of nets:                        172356
+Number of cells:                       130103
+Number of combinational cells:         121097
+Number of sequential cells:              8737
+Number of macros/black boxes:               0
+Number of buf/inv:                      29015
+Number of references:                     250
+
+Combinational area:             601355.369231
+Buf/Inv area:                    68424.150953
+Noncombinational area:          126290.405093
+Macro/Black Box area:                0.000000
+Net Interconnect area:        14532726.902740
+
+Total cell area:                727645.774324
+Total area:                   15260372.677065
+1
