@@ -389,13 +389,29 @@ always @(posedge clk or posedge rst) begin
         div_x_r         <= div_x_w[26:0];
         div_out_r       <= div_out_w[33:25];
 
+        if(en_ghi_map_r) begin
+            for(i=0;i<121;i=i+1) begin
+                ghi_map_r[i]  <= ghi_map_w[i][19:0]; //[27:0]
+            end
+        end
+        if(en_h_map_r) begin
+            for(i=0;i<121;i=i+1) begin
+                h_map_r[i]    <= h_map_w[i];
+            end
+        end
+        if(en_gigh_r) begin
+            for(i=0;i<121;i=i+1) begin
+                g_map_r[i]    <= g_map_w[i][13:0];
+                gh_map_r[i]   <= gh_map_w[i][12:0]; //[19:0]
+            end
+        end
+
         for(i=0;i<121;i=i+1) begin
             mapi_r[i]    <= mapi_w[i];
-            g_map_r[i]    <= g_map_w[i][13:0];
-            ghi_map_r[i]  <= ghi_map_w[i][19:0]; //[27:0]
-
-            h_map_r[i]    <= h_map_w[i];
-            gh_map_r[i]   <= gh_map_w[i][12:0]; //[19:0]
+            //g_map_r[i]    <= g_map_w[i][13:0];
+            //ghi_map_r[i]  <= ghi_map_w[i][19:0]; //[27:0]
+            //h_map_r[i]    <= h_map_w[i];
+            //gh_map_r[i]   <= gh_map_w[i][12:0]; //[19:0]
         end
         for(i=0;i<11;i=i+1) begin
             in_buffer_r[i] <= in_buffer_w[i];
