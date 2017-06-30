@@ -19,27 +19,27 @@ module TESTBED;
     
 initial begin
     `ifdef RTL
-        $fsdbDumpfile("blft.fsdb");
-        $fsdbDumpvars;
-        $fsdbDumpMDA;
-        // $dumpfile("blft.vcd");
-        // $dumpvars(0, TESTBED);
+        // $fsdbDumpfile("blft.fsdb");
+        // $fsdbDumpvars;
+        // $fsdbDumpMDA;
+        $dumpfile("blft.vcd");
+        $dumpvars(0, TESTBED);
     `endif
     `ifdef GATE
-        // $sdf_annotate("blft_syn.sdf",blft_CORE);
-        $fsdbDumpfile("blft_syn.fsdb");
-        $fsdbDumpvars;
-        $fsdbDumpMDA;
-        // $dumpfile("blft_syn.vcd");
-        // $dumpvars();
+        $sdf_annotate("blft_syn.sdf",blft_CORE);
+        // $fsdbDumpfile("blft_syn.fsdb");
+        // $fsdbDumpvars;
+        // $fsdbDumpMDA;
+        $dumpfile("blft_syn.vcd");
+        $dumpvars();
     `endif
     `ifdef POST
-        // $sdf_annotate("blft_POST.sdf",blft_CORE);
-        $fsdbDumpfile("blft_POST.fsdb");
-        $fsdbDumpvars;
-        $fsdbDumpMDA;
-        // $dumpfile("blft_POST.vcd");
-        // $dumpvars();
+        $sdf_annotate("blft_POST.sdf",blft_CORE);
+        // $fsdbDumpfile("blft_POST.fsdb");
+        // $fsdbDumpvars;
+        // $fsdbDumpMDA;
+        $dumpfile("blft_POST.vcd");
+        $dumpvars();
     `endif
 end
 

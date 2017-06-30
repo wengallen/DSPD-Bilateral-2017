@@ -5,9 +5,7 @@
 
 `include "mul_gi.v"
 `include "mul_ghi.v"
-
 `include "mul_h.v"
-`include "mul_gh.v"
 
 `include "sum_ghi.v"
 `include "sum_gh.v"

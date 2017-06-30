@@ -5,7 +5,7 @@ ref1 = uint8(zeros(256));
 img1_ref = double(imread('img1_v2_w_05_S_03_0.1.png'));
 
 %% 8*8小格子 先直後橫
-fid=fopen('out_v1.txt','r'); %輸入數字檔 檔名
+fid=fopen('out-clock-gate.txt','r'); %輸入數字檔 檔名
 for L=1:256
     for K=1:256
         temp = fscanf(fid,'%s',1);

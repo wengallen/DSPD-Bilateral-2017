@@ -62,8 +62,6 @@ change_names -hierarchy -rules name_rule
 
 
 # Area/Timing/Power report
-report_timing
-report_area
 report_timing > blft.timing_rpt
 report_area   > blft.area_rpt
 report_power  > blft.power_rpt
@@ -71,6 +69,9 @@ report_power  > blft.power_rpt
 write -hierarchy -format ddc -output ./blft.ddc
 write -hierarchy -format verilog -output ./blft_syn.v
 write_script > ./blft_syn.dc
-#write_sdf -version 2.1 blft_syn.sdf
-write_sdf -version 1.0  -context verilog  -load_delay net  blft_syn.sdf
+write_sdf -version 2.1 blft_syn.sdf
+write_sdf -version 1.0  -context verilog  -load_delay net  blft_syn_v1.0.sdf
 write_sdc blft_syn.sdc
+
+report_timing
+report_area

@@ -21,12 +21,12 @@ set power_clock_network_include_register_clock_pin_power false
 #======================================================
 
 set search_path {./ \
+				 /home/raid7_2/user05/r05013/U18_cellbased/umc18_artisan/Synthesis/ \
                  /usr/cad/synopsys/synthesis/cur/libraries/syn/ \
-		 /home/raid7_1/userd/d04027/faraday_U18/Synthesis \
                  }
 
-set link_library {* fsa0m_a_generic_core_ff1p98vm40c.db fsa0m_a_generic_core_ss1p62v125c.db}
-set target_library { fsa0m_a_generic_core_ff1p98vm40c.db fsa0m_a_generic_core_ss1p62v125c.db}
+set link_library {* fast.db slow.db}
+set target_library { fast.db slow.db}
 set synthetic_library {dw_foundation.sldb}
 
 
